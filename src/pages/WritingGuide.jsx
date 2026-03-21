@@ -101,13 +101,17 @@ export default function WritingGuide() {
               </nav>
 
               {/* Quick facts */}
-              <div className="mt-8 bg-white dark:bg-[var(--color-card-dark)] rounded-2xl p-5 border border-[var(--color-border-light)] dark:border-white/10" data-aos="fade-up" data-aos-delay="400">
-                <h3 className="font-label text-xs text-[var(--color-ink-muted)] dark:text-white/40 mb-3">Quick Facts</h3>
-                <ul className="space-y-2.5">
+              <div className="mt-6 bg-white dark:bg-[var(--color-card-dark)] rounded-2xl p-4 border border-[var(--color-border-light)] dark:border-white/10" style={{ animation: 'fadeInUp 0.4s ease 300ms both' }}>
+                <h3 className="font-label text-[10px] tracking-widest text-[var(--color-ink-muted)] dark:text-white/40 mb-2.5 uppercase">Quick Facts</h3>
+                <ul className="space-y-1.5">
                   {quickFacts.map((fact, idx) => (
-                    <li key={idx} className="flex items-start gap-2.5" data-aos="fade-up" data-aos-delay={400 + idx * 60}>
-                      <div className="w-1.5 h-1.5 rounded-full bg-[var(--color-secondary)] flex-shrink-0 mt-1.5" aria-hidden="true" />
-                      <p className="text-xs text-[var(--color-ink-muted)] dark:text-white/60 leading-relaxed">
+                    <li
+                      key={idx}
+                      className="flex items-baseline gap-2"
+                      style={{ animation: `fadeInUp 0.3s ease ${300 + idx * 60}ms both` }}
+                    >
+                      <div className="w-1 h-1 rounded-full bg-[var(--color-secondary)] flex-shrink-0" aria-hidden="true" />
+                      <p className="text-[11px] text-[var(--color-ink-muted)] dark:text-white/60 leading-snug">
                         <span className="font-semibold text-[var(--color-ink)] dark:text-white/80">{fact.label}:</span> {fact.value}
                       </p>
                     </li>
@@ -140,7 +144,7 @@ export default function WritingGuide() {
 
                 {/* Pro tip */}
                 {current.proTip && (
-                  <div className="mx-6 mb-6 p-4 bg-[var(--color-secondary)]/10 dark:bg-[var(--color-secondary)]/5 rounded-xl border border-[var(--color-secondary)]/20" style={{ animation: 'fadeInUp 0.4s ease 0.2s both' }}>
+                  <div className="mx-6 mb-6 p-4 bg-[var(--color-secondary)]/10 dark:bg-[var(--color-secondary)]/5 rounded-xl border border-[var(--color-secondary)]/20" style={{ animation: 'fadeInUp 0.4s ease 200ms both' }}>
                     <div className="flex items-start gap-3">
                       <Lightbulb size={16} className="text-[var(--color-secondary)] flex-shrink-0 mt-0.5" aria-hidden="true" />
                       <p className="text-sm text-[var(--color-ink-muted)] dark:text-white/70 leading-relaxed">

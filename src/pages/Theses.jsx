@@ -9,6 +9,7 @@ import { colleges } from '../data/colleges'
 const COLLEGES = ['All', ...colleges.map(c => c.abbreviation)]
 const DEGREE_LEVELS = ['All', 'Undergraduate', 'Graduate', 'Doctoral']
 const YEARS = ['All', '2020-2024', '2015-2019', '2010-2014', '2000-2009', 'Before 2000']
+const PAGE_SIZE = 20
 
 function degreeBadge(level) {
   if (level === 'undergraduate') return { label: 'Undergrad', cls: 'tag-blue' }
@@ -65,7 +66,6 @@ export default function Theses() {
   const [degreeLevel, setDegreeLevel] = useState('All')
   const [yearRange, setYearRange] = useState('All')
   const [page, setPage] = useState(1)
-  const PAGE_SIZE = 20
 
   const { data: theses = [], isLoading, isError } = useQuery({
     queryKey: ['theses'],
@@ -233,7 +233,7 @@ export default function Theses() {
               </div>
 
               {totalPages > 1 && (
-                <div className="flex items-center justify-center gap-2 mt-10 pt-8 border-t border-[var(--color-border-light)] dark:border-white/10" data-aos="fade-up">
+                <div className="flex items-center justify-center gap-2 mt-10 pt-8 border-t border-[var(--color-border-light)] dark:border-white/10" style={{ animation: 'fadeInUp 0.3s ease both' }}>
                   <button
                     onClick={() => { setPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
                     disabled={page === 1}
@@ -257,6 +257,7 @@ export default function Theses() {
                                 ? 'bg-[var(--color-primary)] text-white'
                                 : 'text-[var(--color-ink-muted)] dark:text-white/50 hover:bg-white dark:hover:bg-white/10 border border-[var(--color-border-light)] dark:border-white/10'
                             }`}
+                            aria-label={`Page ${p}`}
                             aria-current={page === p ? 'page' : undefined}
                           >
                             {p}

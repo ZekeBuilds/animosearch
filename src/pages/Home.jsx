@@ -85,31 +85,50 @@ function ThesisCard({ thesis }) {
 
 /* ── Featured Carousel ─────────────────────────────────── */
 function FeaturedCarousel({ featured }) {
+  const containerRef = useRef(null)
+  const pausedRef = useRef(false)
+  const posRef = useRef(0)
   const [paused, setPaused] = useState(false)
 
-  if (featured.length === 0) return null
+  useEffect(() => {
+    if (!featured.length) return
+    const el = containerRef.current
+    if (!el) return
+    const SPEED = 0.5
+    let raf
+    const tick = () => {
+      if (!pausedRef.current) {
+        posRef.current += SPEED
+        const half = el.scrollWidth / 2
+        if (posRef.current >= half) posRef.current -= half
+        el.scrollLeft = posRef.current
+      }
+      raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [featured.length])
 
+  const handleMouseEnter = () => { pausedRef.current = true; setPaused(true) }
+  const handleMouseLeave = () => {
+    if (containerRef.current) posRef.current = containerRef.current.scrollLeft
+    pausedRef.current = false
+    setPaused(false)
+  }
+
+  if (!featured.length) return null
   const doubled = [...featured, ...featured]
-  const duration = Math.max(20, featured.length * 4)
 
   return (
-    <div
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-    >
+    <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div
-        className="overflow-hidden"
-        style={{ paddingLeft: 'max(1.5rem, calc((100vw - 1280px) / 2 + 1.5rem))' }}
+        ref={containerRef}
+        className="overflow-x-auto pb-3"
+        style={{ scrollbarWidth: 'thin', scrollbarColor: 'var(--color-primary) transparent' }}
+        role="list"
+        aria-label="Featured theses carousel"
       >
-        <div
-          className="flex"
-          style={{
-            animation: `carouselScroll ${duration}s linear infinite`,
-            animationPlayState: paused ? 'paused' : 'running',
-          }}
-          role="list"
-          aria-label="Featured theses carousel"
-        >
+        <div className="flex w-max">
           {doubled.map((thesis, i) => (
             <div
               key={`${thesis.id}-${i}`}
@@ -123,7 +142,7 @@ function FeaturedCarousel({ featured }) {
         </div>
       </div>
 
-      <div className="container-lg mt-4 flex items-center gap-2">
+      <div className="container-lg mt-2 flex items-center gap-2">
         <div
           className={`w-2 h-2 rounded-full transition-all duration-300 ${paused ? 'bg-[var(--color-primary)]' : 'bg-[var(--color-border-light)] dark:bg-white/20'}`}
           aria-hidden="true"
