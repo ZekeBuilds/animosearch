@@ -16,42 +16,44 @@ function degreeBadge(level) {
   return { label: 'Doctoral', cls: 'tag-teal' }
 }
 
-function ThesisCard({ thesis }) {
+function ThesisRow({ thesis }) {
   const badge = degreeBadge(thesis.degreeLevel)
   const college = colleges.find(c => c.id === thesis.college.toLowerCase())
 
   return (
     <Link
       to={`/theses/${thesis.slug}`}
-      className="group card block cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
+      className="group flex items-start gap-4 py-5 px-4 -mx-4 rounded-xl hover:bg-white dark:hover:bg-[var(--color-card-dark)] transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
       data-aos="fade-up"
       aria-label={`Read: ${thesis.title}`}
     >
+      {/* College color bar */}
       <div
-        className="h-1.5 w-full"
+        className="w-1 self-stretch rounded-full flex-shrink-0 min-h-[2.5rem]"
         style={{ background: college?.color || 'var(--color-primary)' }}
         aria-hidden="true"
       />
-      <div className="p-5">
-        <div className="flex items-center gap-2 mb-3 flex-wrap">
+      {/* Content */}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 mb-1.5 flex-wrap">
           <span className="tag tag-blue">{thesis.college}</span>
           <span className={`tag ${badge.cls}`}>{badge.label}</span>
-          <span className="ml-auto font-label text-xs text-[var(--color-ink-subtle)] dark:text-white/40">{thesis.year}</span>
         </div>
-        <h2 className="font-display font-bold text-base text-[var(--color-ink)] dark:text-white mb-2 leading-snug group-hover:text-[var(--color-primary)] transition-colors line-clamp-3">
+        <p className="font-display font-bold text-[0.95rem] text-[var(--color-ink)] dark:text-white mb-1 leading-snug group-hover:text-[var(--color-primary)] transition-colors line-clamp-2">
           {thesis.title}
-        </h2>
-        <p className="text-xs text-[var(--color-ink-muted)] dark:text-white/50 mb-3">
+        </p>
+        <p className="text-xs text-[var(--color-ink-muted)] dark:text-white/50">
           {thesis.author} · {thesis.department}
         </p>
-        <p className="text-xs text-[var(--color-ink-muted)] dark:text-white/60 leading-relaxed line-clamp-3">
-          {thesis.abstract}
-        </p>
-        <div className="flex flex-wrap gap-1 mt-3">
+        <div className="flex flex-wrap gap-1 mt-2">
           {thesis.keywords.slice(0, 3).map(kw => (
             <span key={kw} className="tag tag-teal">{kw}</span>
           ))}
         </div>
+      </div>
+      {/* Year */}
+      <div className="flex-shrink-0 text-right pt-0.5">
+        <span className="font-label text-xs text-[var(--color-ink-subtle)] dark:text-white/40">{thesis.year}</span>
       </div>
     </Link>
   )
@@ -214,9 +216,9 @@ export default function Theses() {
           )}
 
           {!isLoading && !isError && filtered.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="divide-y divide-[var(--color-border-light)] dark:divide-white/10">
               {filtered.map(thesis => (
-                <ThesisCard key={thesis.id} thesis={thesis} />
+                <ThesisRow key={thesis.id} thesis={thesis} />
               ))}
             </div>
           )}

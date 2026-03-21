@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Tailwind v4: use .dark class strategy (not media query) */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   /* ── Brand Colors ── */
   --color-primary: #005E3A;

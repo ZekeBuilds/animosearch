@@ -50,16 +50,16 @@ function ThesisCard({ thesis }) {
   return (
     <Link
       to={`/theses/${thesis.slug}`}
-      className="group flex-shrink-0 w-72 md:w-80 rounded-2xl overflow-hidden bg-white dark:bg-[var(--color-card-dark)] shadow-[0_4px_20px_rgba(0,94,58,0.1)] hover:shadow-[0_8px_32px_rgba(0,94,58,0.2)] transition-all duration-300 hover:-translate-y-1 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
+      className="group flex-shrink-0 w-72 md:w-80 h-full flex flex-col rounded-2xl overflow-hidden bg-white dark:bg-[var(--color-card-dark)] shadow-[0_4px_20px_rgba(0,94,58,0.1)] hover:shadow-[0_8px_32px_rgba(0,94,58,0.2)] transition-all duration-300 hover:-translate-y-1 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
       aria-label={`Read thesis: ${thesis.title}`}
     >
       {/* Color header band by college */}
       <div
-        className="h-2 w-full"
+        className="h-2 w-full flex-shrink-0"
         style={{ background: colleges.find(c => c.id === thesis.college.toLowerCase())?.color || 'var(--color-primary)' }}
         aria-hidden="true"
       />
-      <div className="p-5">
+      <div className="p-5 flex flex-col flex-1">
         <div className="flex items-center justify-between gap-2 mb-3">
           <span className="tag tag-blue">{thesis.college}</span>
           <span className="tag tag-orange">{degreeLabel}</span>
@@ -70,7 +70,7 @@ function ThesisCard({ thesis }) {
         <p className="text-xs text-[var(--color-ink-muted)] dark:text-white/50 mb-3">
           {thesis.author} · {thesis.year}
         </p>
-        <p className="text-xs text-[var(--color-ink-muted)] dark:text-white/60 leading-relaxed line-clamp-3">
+        <p className="text-xs text-[var(--color-ink-muted)] dark:text-white/60 leading-relaxed line-clamp-3 flex-1">
           {thesis.abstract}
         </p>
         <div className="flex flex-wrap gap-1 mt-3">
@@ -155,8 +155,8 @@ export default function Home() {
         {/* Background */}
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1600&q=85"
-            alt="University library interior with students studying"
+            src="https://images.unsplash.com/photo-1562774053-701939374585?w=1600&q=85"
+            alt="De La Salle University campus building"
             className="w-full h-full object-cover"
             loading="eager"
           />
@@ -238,25 +238,29 @@ export default function Home() {
 
       {/* ── STATS ─────────────────────────────────────────── */}
       <section
-        className="bg-[var(--color-sky-bg)] dark:bg-[#0D1F14] py-16"
+        className="bg-[var(--color-sky-bg)] dark:bg-[#0D1F14] py-14"
         aria-label="Animo Repository by the numbers"
       >
         <div className="container-lg">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map(({ value, label, suffix }) => (
+          <p className="font-label text-xs text-[var(--color-ink-muted)] dark:text-white/40 text-center mb-8" data-aos="fade-up">
+            Animo Repository — By the Numbers
+          </p>
+          <div className="flex flex-col sm:flex-row items-stretch divide-y sm:divide-y-0 sm:divide-x divide-[var(--color-border-light)] dark:divide-white/10 border border-[var(--color-border-light)] dark:border-white/10 rounded-2xl overflow-hidden bg-white dark:bg-[var(--color-card-dark)]" data-aos="fade-up">
+            {stats.map(({ value, label, suffix }, i) => (
               <div
                 key={label}
-                className="text-center"
-                data-aos="fade-up"
-                data-aos-delay="100"
+                className="flex-1 flex flex-col items-center justify-center py-8 px-6 relative"
               >
+                {i === 0 && (
+                  <div className="absolute top-0 left-0 right-0 h-0.5 bg-[var(--color-primary)]" aria-hidden="true" />
+                )}
                 <div
-                  className="font-display font-bold text-[var(--color-primary)] dark:text-[var(--color-primary-light)] mb-1"
-                  style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}
+                  className="font-display font-bold text-[var(--color-primary)] dark:text-[var(--color-primary-light)] leading-none mb-2"
+                  style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}
                 >
                   <AnimatedCounter target={value} suffix={suffix} />
                 </div>
-                <div className="font-label text-xs text-[var(--color-ink-muted)] dark:text-white/50">
+                <div className="font-label text-[0.65rem] text-[var(--color-ink-muted)] dark:text-white/50 text-center">
                   {label}
                 </div>
               </div>
@@ -347,6 +351,7 @@ export default function Home() {
           {featured.map(thesis => (
             <div
               key={thesis.id}
+              className="h-[380px]"
               style={{ scrollSnapAlign: 'start' }}
               role="listitem"
               data-aos="fade-up"

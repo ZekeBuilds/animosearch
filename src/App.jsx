@@ -1,10 +1,20 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { useEffect, lazy, Suspense } from 'react'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+    // Give DOM time to update then refresh AOS so lazy-loaded pages animate correctly
+    setTimeout(() => AOS.refresh(), 50)
+  }, [pathname])
+  return null
+}
 
 // Lazy load all pages for code-splitting
 const Home = lazy(() => import('./pages/Home'))
@@ -44,6 +54,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <div className="flex flex-col min-h-screen">
         <Navbar />
         <main className="flex-1">

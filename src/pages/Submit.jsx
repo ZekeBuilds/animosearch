@@ -156,7 +156,6 @@ export default function Submit() {
                         : 'border-[var(--color-border-light)] dark:border-white/10 bg-white dark:bg-[var(--color-card-dark)] hover:border-[var(--color-primary)]/50'
                     }`}
                     aria-pressed={formType === type.id}
-                    data-aos="fade-up"
                   >
                     <div className="flex items-center gap-3 mb-2">
                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${formType === type.id ? 'bg-[var(--color-primary)]/10' : 'bg-[var(--color-sky-bg)] dark:bg-white/5'}`}>
@@ -173,7 +172,7 @@ export default function Submit() {
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="bg-white dark:bg-[var(--color-card-dark)] rounded-2xl p-6 border border-[var(--color-border-light)] dark:border-white/10 space-y-5" noValidate data-aos="fade-up">
+            <form onSubmit={handleSubmit} className="bg-white dark:bg-[var(--color-card-dark)] rounded-2xl p-6 border border-[var(--color-border-light)] dark:border-white/10 space-y-5" noValidate>
 
               {/* Shared fields */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

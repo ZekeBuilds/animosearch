@@ -116,7 +116,7 @@ export default function Quiz() {
 
             <ul className="space-y-3" role="list">
               {question.options.map((opt, idx) => {
-                let style = 'bg-[var(--color-sky-bg)] dark:bg-white/5 border-[var(--color-border-light)] dark:border-white/10 text-[var(--color-ink)] dark:text-white hover:border-[var(--color-primary)] hover:bg-[var(--color-sky-muted)]'
+                let style = 'bg-[var(--color-sky-bg)] dark:bg-white/5 border-[var(--color-border-light)] dark:border-white/10 text-[var(--color-ink)] dark:text-white hover:border-[var(--color-primary)] hover:bg-[var(--color-sky-muted)] hover:text-[var(--color-ink)]'
                 let icon = null
 
                 if (answered) {
