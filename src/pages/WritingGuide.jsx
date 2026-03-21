@@ -1,10 +1,14 @@
 import { useState } from 'react'
 import { Helmet } from 'react-helmet-async'
-import { ChevronDown, Lightbulb, FileEdit, FlaskConical, PenLine, Mic2, Upload, BookOpen } from 'lucide-react'
+import { ChevronDown, Lightbulb, FileEdit, FlaskConical, PenLine, PenTool, Mic2, Upload, BookOpen, CheckSquare } from 'lucide-react'
 import { guideSections, quickFacts } from '../data/guideContent'
 
 const ICON_MAP = {
-  Lightbulb, FileEdit, FlaskConical, PenLine, Mic2, Upload, BookOpen,
+  Lightbulb, FileEdit, FlaskConical,
+  PenLine, PenTool,
+  Mic2, Presentation: Mic2,
+  Upload, CheckSquare,
+  BookOpen,
 }
 
 function AccordionItem({ heading, content }) {
@@ -97,7 +101,9 @@ export default function WritingGuide() {
                   {quickFacts.map((fact, idx) => (
                     <li key={idx} className="flex items-start gap-2.5">
                       <div className="w-1.5 h-1.5 rounded-full bg-[var(--color-secondary)] flex-shrink-0 mt-1.5" aria-hidden="true" />
-                      <p className="text-xs text-[var(--color-ink-muted)] dark:text-white/60 leading-relaxed">{fact}</p>
+                      <p className="text-xs text-[var(--color-ink-muted)] dark:text-white/60 leading-relaxed">
+                        <span className="font-semibold text-[var(--color-ink)] dark:text-white/80">{fact.label}:</span> {fact.value}
+                      </p>
                     </li>
                   ))}
                 </ul>

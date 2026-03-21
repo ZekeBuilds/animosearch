@@ -42,41 +42,55 @@ export default function Colleges() {
       <div className="bg-[var(--color-sky-bg)] dark:bg-[#0D1F14] min-h-screen">
         <div className="container-lg py-12">
 
-          {/* College grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
-            {colleges.map(college => (
+          {/* College list */}
+          <div className="border border-[var(--color-border-light)] dark:border-white/10 rounded-2xl overflow-hidden bg-white dark:bg-[var(--color-card-dark)] divide-y divide-[var(--color-border-light)] dark:divide-white/10 mb-12">
+            {colleges.map((college, i) => (
               <button
                 key={college.id}
                 onClick={() => {
                   setActiveCollege(activeCollege === college.id ? null : college.id)
                   setActiveDept(null)
                 }}
-                className={`group relative text-left rounded-2xl overflow-hidden p-5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] transition-all ${
+                className={`w-full group flex items-center gap-4 px-5 py-4 text-left cursor-pointer focus-visible:outline-none focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] transition-colors ${
                   activeCollege === college.id
-                    ? 'ring-2 ring-[var(--color-primary)] bg-white dark:bg-[var(--color-card-dark)]'
-                    : 'bg-white dark:bg-[var(--color-card-dark)] border border-[var(--color-border-light)] dark:border-white/10 hover:border-[var(--color-primary)] dark:hover:border-[var(--color-primary)]'
+                    ? 'bg-[var(--color-sky-bg)] dark:bg-[var(--color-primary)]/10'
+                    : 'hover:bg-[var(--color-sky-bg)] dark:hover:bg-white/5'
                 }`}
+                data-aos="fade-up"
+                data-aos-delay={i * 50}
                 aria-pressed={activeCollege === college.id}
               >
                 <div
-                  className="h-1 w-full rounded-full mb-4"
+                  className="w-1 self-stretch rounded-full flex-shrink-0 min-h-[2rem]"
                   style={{ background: college.color }}
                   aria-hidden="true"
                 />
-                <p className="font-display font-bold text-2xl mb-1" style={{ color: college.color }}>
-                  {college.abbreviation}
-                </p>
-                <p className="text-xs text-[var(--color-ink-muted)] dark:text-white/50 leading-tight mb-3">
-                  {college.name}
-                </p>
-                <p className="font-label text-xs text-[var(--color-ink-subtle)] dark:text-white/40">
+                <div
+                  className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+                  style={{ background: college.color + '18' }}
+                >
+                  <div className="w-3 h-3 rounded-full" style={{ background: college.color }} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p
+                    className="font-display font-bold text-base transition-colors"
+                    style={{ color: activeCollege === college.id ? college.color : 'var(--color-ink)' }}
+                  >
+                    {college.abbreviation}
+                  </p>
+                  <p className="text-xs text-[var(--color-ink-muted)] dark:text-white/50 leading-tight">
+                    {college.name}
+                  </p>
+                </div>
+                <p className="font-label text-xs text-[var(--color-ink-subtle)] dark:text-white/40 flex-shrink-0">
                   {college.thesisCount.toLocaleString()} theses
                 </p>
-                {activeCollege === college.id && (
-                  <span className="mt-2 inline-block font-label text-xs" style={{ color: college.color }}>
-                    Selected
-                  </span>
-                )}
+                <ChevronRight
+                  size={16}
+                  className={`flex-shrink-0 transition-transform duration-200 ${activeCollege === college.id ? 'rotate-90' : ''}`}
+                  style={{ color: activeCollege === college.id ? college.color : 'var(--color-ink-subtle)' }}
+                  aria-hidden="true"
+                />
               </button>
             ))}
           </div>

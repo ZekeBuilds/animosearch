@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import {
   Search, BookOpen, Users, Award, ArrowRight,
-  Brain, Globe, FlaskConical, Building2, GraduationCap, Compass,
-  ChevronLeft, ChevronRight
+  Brain, FlaskConical, Building2,
 } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { fetchAllTheses } from '../lib/thesesApi'
@@ -85,64 +84,38 @@ function ThesisCard({ thesis }) {
 }
 
 /* ── Featured Carousel ─────────────────────────────────── */
-const CAROUSEL_INTERVAL = 4000
-
 function FeaturedCarousel({ featured }) {
-  const [current, setCurrent] = useState(0)
   const [paused, setPaused] = useState(false)
-  const [cardW, setCardW] = useState(308) // w-72 (288px) + gap-5 (20px) default
-  const trackRef = useRef(null)
-  const total = featured.length
 
-  // Measure actual card width after paint (accounts for responsive sizing)
-  useEffect(() => {
-    const measure = () => {
-      requestAnimationFrame(() => {
-        if (trackRef.current?.firstChild) {
-          setCardW(trackRef.current.firstChild.offsetWidth + 20)
-        }
-      })
-    }
-    measure()
-    window.addEventListener('resize', measure)
-    return () => window.removeEventListener('resize', measure)
-  }, [total])
+  if (featured.length === 0) return null
 
-  // Auto-advance
-  useEffect(() => {
-    if (paused || total === 0) return
-    const id = setInterval(() => setCurrent(c => (c + 1) % total), CAROUSEL_INTERVAL)
-    return () => clearInterval(id)
-  }, [paused, total])
-
-  const go = (i) => setCurrent(((i % total) + total) % total)
-
-  if (total === 0) return null
+  const doubled = [...featured, ...featured]
+  const duration = Math.max(20, featured.length * 4)
 
   return (
     <div
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* Sliding track */}
       <div
         className="overflow-hidden"
-        style={{
-          paddingLeft: 'max(1.5rem, calc((100vw - 1280px) / 2 + 1.5rem))',
-        }}
+        style={{ paddingLeft: 'max(1.5rem, calc((100vw - 1280px) / 2 + 1.5rem))' }}
       >
         <div
-          ref={trackRef}
-          className="flex gap-5 transition-transform duration-500 ease-in-out"
-          style={{ transform: `translateX(-${current * cardW}px)` }}
+          className="flex"
+          style={{
+            animation: `carouselScroll ${duration}s linear infinite`,
+            animationPlayState: paused ? 'paused' : 'running',
+          }}
           role="list"
           aria-label="Featured theses carousel"
         >
-          {featured.map((thesis, i) => (
+          {doubled.map((thesis, i) => (
             <div
-              key={thesis.id}
-              className="h-[380px] flex-shrink-0 w-72 md:w-80"
+              key={`${thesis.id}-${i}`}
+              className="h-[380px] flex-shrink-0 w-72 md:w-80 mr-5"
               role="listitem"
+              aria-hidden={i >= featured.length ? true : undefined}
             >
               <ThesisCard thesis={thesis} />
             </div>
@@ -150,57 +123,14 @@ function FeaturedCarousel({ featured }) {
         </div>
       </div>
 
-      {/* Controls row */}
-      <div className="container-lg mt-6 flex items-center justify-between">
-        {/* Dot indicators */}
-        <div className="flex items-center gap-2">
-          {featured.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => go(i)}
-              className={`rounded-full transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] ${
-                i === current
-                  ? 'w-5 h-2 bg-[var(--color-primary)]'
-                  : 'w-2 h-2 bg-[var(--color-border-light)] dark:bg-white/20 hover:bg-[var(--color-primary)]/50'
-              }`}
-              aria-label={`Go to thesis ${i + 1}`}
-              aria-current={i === current ? 'true' : undefined}
-            />
-          ))}
-        </div>
-
-        {/* Arrow buttons */}
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => go(current - 1)}
-            className="w-9 h-9 rounded-full border border-[var(--color-border-light)] dark:border-white/20 flex items-center justify-center text-[var(--color-ink-muted)] dark:text-white/60 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] dark:hover:text-[var(--color-primary-light)] transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
-            aria-label="Previous thesis"
-          >
-            <ChevronLeft size={16} aria-hidden="true" />
-          </button>
-          <button
-            onClick={() => go(current + 1)}
-            className="w-9 h-9 rounded-full border border-[var(--color-border-light)] dark:border-white/20 flex items-center justify-center text-[var(--color-ink-muted)] dark:text-white/60 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] dark:hover:text-[var(--color-primary-light)] transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
-            aria-label="Next thesis"
-          >
-            <ChevronRight size={16} aria-hidden="true" />
-          </button>
-        </div>
-      </div>
-
-      {/* Progress bar — restarts on slide change via key */}
-      <div className="container-lg mt-3">
-        <div className="h-0.5 bg-[var(--color-border-light)] dark:bg-white/10 rounded-full overflow-hidden w-24">
-          <div
-            key={`${current}-${paused}`}
-            className="h-full bg-[var(--color-primary)] rounded-full"
-            style={{
-              animation: paused
-                ? 'none'
-                : `carouselProgress ${CAROUSEL_INTERVAL}ms linear forwards`,
-            }}
-          />
-        </div>
+      <div className="container-lg mt-4 flex items-center gap-2">
+        <div
+          className={`w-2 h-2 rounded-full transition-all duration-300 ${paused ? 'bg-[var(--color-primary)]' : 'bg-[var(--color-border-light)] dark:bg-white/20'}`}
+          aria-hidden="true"
+        />
+        <span className="font-label text-[0.6rem] tracking-[0.1em] text-[var(--color-ink-subtle)] dark:text-white/30 select-none">
+          {paused ? 'PAUSED — move away to resume' : 'LIVE — hover to pause'}
+        </span>
       </div>
     </div>
   )
@@ -210,7 +140,7 @@ function FeaturedCarousel({ featured }) {
 export default function Home() {
   const { data: allTheses = [] } = useQuery({ queryKey: ['theses'], queryFn: fetchAllTheses })
   const featured = allTheses.filter(t => t.featured).slice(0, 6)
-  const topColleges = colleges.slice(0, 6)
+  const topColleges = colleges
 
   const stats = [
     { value: 20000, label: 'Theses & Dissertations', suffix: '+' },
@@ -488,34 +418,47 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {topColleges.map((college, i) => (
-              <Link
-                key={college.id}
-                to={`/colleges`}
-                className="group relative rounded-2xl overflow-hidden bg-white dark:bg-[var(--color-card-dark)] border border-[var(--color-border-light)] dark:border-white/10 p-5 hover:border-[var(--color-primary)] dark:hover:border-[var(--color-primary)] hover:shadow-[0_4px_20px_rgba(0,94,58,0.12)] transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
-                data-aos="fade-up"
-                data-aos-delay={i * 80}
-                aria-label={`Explore ${college.abbreviation} — ${college.name}`}
-              >
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center mb-3"
-                  style={{ background: college.color + '20' }}
-                  aria-hidden="true"
+          <div className="border border-[var(--color-border-light)] dark:border-white/10 rounded-2xl overflow-hidden bg-white dark:bg-[var(--color-card-dark)]">
+            <div className="grid grid-cols-1 sm:grid-cols-2">
+              {topColleges.map((college, i) => (
+                <Link
+                  key={college.id}
+                  to="/colleges"
+                  className={`group flex items-stretch min-h-[80px] hover:bg-[var(--color-sky-bg)] dark:hover:bg-white/5 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] border-[var(--color-border-light)] dark:border-white/10 ${i < topColleges.length - 2 ? 'border-b' : ''} ${i % 2 === 0 ? 'sm:border-r' : ''}`}
+                  data-aos="fade-up"
+                  data-aos-delay={i * 50}
+                  aria-label={`Explore ${college.abbreviation} — ${college.name}`}
                 >
-                  <div className="w-3 h-3 rounded-full" style={{ background: college.color }} />
-                </div>
-                <p className="font-display font-bold text-lg text-[var(--color-ink)] dark:text-white group-hover:text-[var(--color-primary)] transition-colors">
-                  {college.abbreviation}
-                </p>
-                <p className="text-xs text-[var(--color-ink-muted)] dark:text-white/50 mb-2 leading-tight">
-                  {college.name}
-                </p>
-                <p className="font-label text-xs text-[var(--color-primary)] dark:text-[var(--color-secondary)]">
-                  {college.thesisCount.toLocaleString()} theses
-                </p>
-              </Link>
-            ))}
+                  {/* Thick color stripe */}
+                  <div className="w-1.5 flex-shrink-0" style={{ background: college.color }} aria-hidden="true" />
+
+                  <div className="flex items-center gap-4 px-5 py-4 flex-1">
+                    {/* Abbreviation */}
+                    <span
+                      className="font-display font-bold text-xl flex-shrink-0 transition-colors duration-200"
+                      style={{ color: college.color }}
+                    >
+                      {college.abbreviation}
+                    </span>
+
+                    {/* Name */}
+                    <p className="text-xs text-[var(--color-ink-muted)] dark:text-white/50 leading-snug flex-1 min-w-0">
+                      {college.name}
+                    </p>
+
+                    {/* Count */}
+                    <div className="flex-shrink-0 text-right">
+                      <p className="font-label text-xs font-bold text-[var(--color-ink)] dark:text-white">
+                        {college.thesisCount.toLocaleString()}
+                      </p>
+                      <p className="font-label text-[10px] text-[var(--color-ink-subtle)] dark:text-white/30 tracking-wide">
+                        THESES
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
 
           <div className="text-center mt-8" data-aos="fade-up">

@@ -92,13 +92,13 @@ export default function Quiz() {
         <div className="max-w-2xl w-full">
 
           {/* Header */}
-          <div className="text-center mb-8">
+          <div className="text-center mb-8" data-aos="fade-down">
             <span className="section-label">DLSU Research Trivia</span>
             <h1 className="font-display font-bold text-3xl text-[var(--color-ink)] dark:text-white">Research Quiz</h1>
           </div>
 
           {/* Progress */}
-          <div className="bg-white dark:bg-[var(--color-card-dark)] rounded-2xl p-6 mb-4 border border-[var(--color-border-light)] dark:border-white/10">
+          <div className="bg-white dark:bg-[var(--color-card-dark)] rounded-2xl p-6 mb-4 border border-[var(--color-border-light)] dark:border-white/10" data-aos="fade-up">
             <div className="flex justify-between items-center mb-3">
               <span className="font-label text-xs text-[var(--color-ink-muted)] dark:text-white/50">Question {current + 1} of {total}</span>
               <span className="font-label text-xs text-[var(--color-primary)]">Score: {score}</span>
@@ -109,7 +109,11 @@ export default function Quiz() {
           </div>
 
           {/* Question card */}
-          <div className="bg-white dark:bg-[var(--color-card-dark)] rounded-2xl p-8 border border-[var(--color-border-light)] dark:border-white/10 mb-4">
+          <div
+            key={`q-${current}`}
+            className="bg-white dark:bg-[var(--color-card-dark)] rounded-2xl p-8 border border-[var(--color-border-light)] dark:border-white/10 mb-4"
+            style={{ animation: 'fadeInUp 0.35s ease both' }}
+          >
             <h2 className="font-display font-semibold text-xl text-[var(--color-ink)] dark:text-white mb-6 leading-snug">
               {question.question}
             </h2>
@@ -132,7 +136,7 @@ export default function Quiz() {
                 }
 
                 return (
-                  <li key={idx}>
+                  <li key={idx} style={{ animation: `fadeInUp 0.3s ease ${idx * 60}ms both` }}>
                     <button
                       onClick={() => handleSelect(idx)}
                       disabled={answered}
@@ -151,7 +155,7 @@ export default function Quiz() {
             </ul>
 
             {answered && (
-              <div className="mt-5 p-4 bg-[var(--color-sky-bg)] dark:bg-white/5 rounded-xl border border-[var(--color-border-light)] dark:border-white/10">
+              <div className="mt-5 p-4 bg-[var(--color-sky-bg)] dark:bg-white/5 rounded-xl border border-[var(--color-border-light)] dark:border-white/10" style={{ animation: 'fadeInUp 0.3s ease both' }}>
                 <p className="text-sm text-[var(--color-ink-muted)] dark:text-white/70 leading-relaxed">
                   <span className="font-semibold text-[var(--color-primary)]">Explanation: </span>
                   {question.explanation}

@@ -72,39 +72,44 @@ export default function Showcase() {
               <p className="font-display text-lg text-[var(--color-ink)] dark:text-white">No featured theses for this college yet.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filtered.map(thesis => {
+            <div className="divide-y divide-[var(--color-border-light)] dark:divide-white/10">
+              {filtered.map((thesis, i) => {
                 const college = colleges.find(c => c.id === thesis.college.toLowerCase())
                 return (
                   <article
                     key={thesis.id}
-                    className="group bg-white dark:bg-[var(--color-card-dark)] rounded-2xl border border-[var(--color-border-light)] dark:border-white/10 hover:border-[var(--color-primary)] dark:hover:border-[var(--color-primary)] transition-all overflow-hidden cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
+                    className="group flex items-start gap-4 py-5 px-3 -mx-3 rounded-xl cursor-pointer hover:bg-white dark:hover:bg-[var(--color-card-dark)] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
                     onClick={() => setLightbox(thesis.id)}
                     data-aos="fade-up"
+                    data-aos-delay={Math.min(i * 40, 200)}
                     tabIndex={0}
                     role="button"
                     aria-label={`Read abstract: ${thesis.title}`}
                     onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && setLightbox(thesis.id)}
                   >
-                    <div className="h-1.5 w-full" style={{ background: college?.color || 'var(--color-primary)' }} aria-hidden="true" />
-                    <div className="p-5">
-                      <div className="flex items-center gap-2 mb-3 flex-wrap">
+                    <div
+                      className="w-1 self-stretch rounded-full flex-shrink-0 min-h-[2.5rem]"
+                      style={{ background: college?.color || 'var(--color-primary)' }}
+                      aria-hidden="true"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                         <span className="tag tag-blue">{thesis.college}</span>
-                        <span className="ml-auto font-label text-xs text-[var(--color-ink-subtle)] dark:text-white/40">{thesis.year}</span>
+                        <span className="font-label text-xs text-[var(--color-ink-subtle)] dark:text-white/40 ml-auto">{thesis.year}</span>
                       </div>
-                      <h2 className="font-display font-bold text-sm text-[var(--color-ink)] dark:text-white group-hover:text-[var(--color-primary)] transition-colors line-clamp-3 mb-2 leading-snug">
+                      <h2 className="font-display font-bold text-[0.95rem] text-[var(--color-ink)] dark:text-white group-hover:text-[var(--color-primary)] transition-colors line-clamp-2 mb-1 leading-snug">
                         {thesis.title}
                       </h2>
-                      <p className="text-xs text-[var(--color-ink-muted)] dark:text-white/50 mb-3">
+                      <p className="text-xs text-[var(--color-ink-muted)] dark:text-white/50 mb-2">
                         {thesis.author} · {thesis.department}
                       </p>
-                      <p className="text-xs text-[var(--color-ink-muted)] dark:text-white/60 leading-relaxed line-clamp-3">
+                      <p className="text-xs text-[var(--color-ink-muted)] dark:text-white/60 leading-relaxed line-clamp-2">
                         {thesis.abstract}
                       </p>
-                      <p className="mt-3 font-label text-xs text-[var(--color-primary)]">
-                        Click to read abstract
-                      </p>
                     </div>
+                    <span className="font-label text-xs text-[var(--color-primary)] flex-shrink-0 mt-0.5 group-hover:underline whitespace-nowrap">
+                      Read →
+                    </span>
                   </article>
                 )
               })}

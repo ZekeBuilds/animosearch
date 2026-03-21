@@ -83,7 +83,7 @@ export default function Checklist() {
 
           {/* Degree level filter */}
           <div className="flex flex-wrap gap-2 mb-8" role="group" aria-label="Filter by degree level">
-            {DEGREE_LEVELS.map(level => (
+            {DEGREE_LEVELS.map((level, i) => (
               <button
                 key={level}
                 onClick={() => setDegreeLevel(level)}
@@ -92,6 +92,8 @@ export default function Checklist() {
                     ? 'bg-[var(--color-primary)] text-white border-[var(--color-primary)]'
                     : 'bg-white dark:bg-white/10 text-[var(--color-ink-muted)] dark:text-white/60 border-[var(--color-border-light)] dark:border-white/10 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)]'
                 }`}
+                data-aos="fade-up"
+                data-aos-delay={i * 80}
                 aria-pressed={degreeLevel === level}
               >
                 {DEGREE_LABELS[level]}

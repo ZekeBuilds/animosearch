@@ -167,12 +167,12 @@ export default function ThesisBudget() {
             </div>
 
             {/* Summary sidebar */}
-            <aside className="lg:sticky lg:top-24 self-start space-y-4">
+            <aside className="lg:sticky lg:top-24 self-start space-y-4" data-aos="fade-left" data-aos-delay="100">
               <div className="bg-white dark:bg-[var(--color-card-dark)] rounded-2xl p-6 border border-[var(--color-border-light)] dark:border-white/10">
                 <h3 className="font-display font-bold text-lg text-[var(--color-ink)] dark:text-white mb-5">Budget Summary</h3>
                 <dl className="space-y-3 mb-5">
-                  {catTotals.map(cat => (
-                    <div key={cat.id} className="flex items-center justify-between">
+                  {catTotals.map((cat, i) => (
+                    <div key={cat.id} className="flex items-center justify-between" data-aos="fade-up" data-aos-delay={i * 60}>
                       <dt className="text-sm text-[var(--color-ink-muted)] dark:text-white/60">{cat.label}</dt>
                       <dd className="font-semibold text-sm text-[var(--color-ink)] dark:text-white">{formatPHP(cat.total)}</dd>
                     </div>
