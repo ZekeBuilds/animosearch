@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 import { X, ExternalLink, BookOpen, ArrowRight } from 'lucide-react'
-import { theses } from '../data/theses'
+import { useQuery } from '@tanstack/react-query'
+import { fetchAllTheses } from '../lib/thesesApi'
 import { colleges } from '../data/colleges'
 
 const COLLEGE_FILTERS = ['All', ...colleges.map(c => c.abbreviation)]
@@ -10,6 +11,8 @@ const COLLEGE_FILTERS = ['All', ...colleges.map(c => c.abbreviation)]
 export default function Showcase() {
   const [activeCollege, setActiveCollege] = useState('All')
   const [lightbox, setLightbox] = useState(null)
+
+  const { data: theses = [] } = useQuery({ queryKey: ['theses'], queryFn: fetchAllTheses })
 
   const featured = theses.filter(t => t.featured)
   const filtered = activeCollege === 'All'

@@ -2,12 +2,15 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { ChevronRight, BookOpen, ArrowRight } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
+import { fetchAllTheses } from '../lib/thesesApi'
 import { colleges } from '../data/colleges'
-import { theses } from '../data/theses'
 
 export default function Colleges() {
   const [activeCollege, setActiveCollege] = useState(null)
   const [activeDept, setActiveDept] = useState(null)
+
+  const { data: theses = [] } = useQuery({ queryKey: ['theses'], queryFn: fetchAllTheses })
 
   const selectedCollege = activeCollege ? colleges.find(c => c.id === activeCollege) : null
   const collegeTheses = selectedCollege

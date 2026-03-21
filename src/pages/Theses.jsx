@@ -1,8 +1,9 @@
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
-import { Search, X, BookOpen } from 'lucide-react'
-import { theses } from '../data/theses'
+import { Search, X, BookOpen, Loader2 } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
+import { fetchAllTheses } from '../lib/thesesApi'
 import { colleges } from '../data/colleges'
 
 const COLLEGES = ['All', ...colleges.map(c => c.abbreviation)]
@@ -62,6 +63,11 @@ export default function Theses() {
   const [degreeLevel, setDegreeLevel] = useState('All')
   const [yearRange, setYearRange] = useState('All')
 
+  const { data: theses = [], isLoading, isError } = useQuery({
+    queryKey: ['theses'],
+    queryFn: fetchAllTheses,
+  })
+
   const filtered = useMemo(() => {
     return theses.filter(t => {
       const matchSearch = !search ||
@@ -112,7 +118,7 @@ export default function Theses() {
             Browse Theses
           </h1>
           <p className="text-white/60 max-w-lg text-sm leading-relaxed mb-8">
-            {theses.length} thesis and dissertation records from DLSU's Animo Repository.
+            {isLoading ? 'Loading records from DLSU\'s Animo Repository…' : `${theses.length} thesis and dissertation records from DLSU's Animo Repository.`}
           </p>
           <div className="relative max-w-lg">
             <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" aria-hidden="true" />
@@ -184,17 +190,38 @@ export default function Theses() {
             )}
           </div>
 
-          <p className="font-label text-xs text-[var(--color-ink-muted)] dark:text-white/40 mb-6">
-            Showing {filtered.length} of {theses.length} theses
-          </p>
+          {!isLoading && !isError && (
+            <p className="font-label text-xs text-[var(--color-ink-muted)] dark:text-white/40 mb-6">
+              Showing {filtered.length} of {theses.length} theses
+            </p>
+          )}
 
-          {filtered.length > 0 ? (
+          {isLoading && (
+            <div className="flex items-center justify-center py-24 gap-3 text-[var(--color-ink-muted)] dark:text-white/50">
+              <Loader2 size={22} className="animate-spin" aria-hidden="true" />
+              <span className="font-label text-sm">Loading theses…</span>
+            </div>
+          )}
+
+          {isError && (
+            <div className="flex flex-col items-center justify-center py-24 text-center">
+              <div className="w-20 h-20 rounded-full bg-red-50 dark:bg-red-500/10 flex items-center justify-center mb-4">
+                <BookOpen size={28} className="text-red-400" aria-hidden="true" />
+              </div>
+              <h3 className="font-display text-xl text-[var(--color-ink)] dark:text-white mb-2">Could not load theses</h3>
+              <p className="text-sm text-[var(--color-ink-muted)] dark:text-white/50">Check your connection or try refreshing the page.</p>
+            </div>
+          )}
+
+          {!isLoading && !isError && filtered.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filtered.map(thesis => (
                 <ThesisCard key={thesis.id} thesis={thesis} />
               ))}
             </div>
-          ) : (
+          )}
+
+          {!isLoading && !isError && filtered.length === 0 && (
             <div className="flex flex-col items-center justify-center py-24 text-center">
               <div className="w-20 h-20 rounded-full bg-[var(--color-sky-muted)] dark:bg-white/5 flex items-center justify-center mb-4">
                 <BookOpen size={28} className="text-[var(--color-ink-subtle)]" aria-hidden="true" />

@@ -1,15 +1,25 @@
 import { useParams, Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
-import { ExternalLink, Share2, ArrowLeft, Tag, GraduationCap, Building2, Calendar, Check } from 'lucide-react'
+import { ExternalLink, Share2, ArrowLeft, Tag, GraduationCap, Building2, Calendar, Check, Loader2 } from 'lucide-react'
 import { useState } from 'react'
-import { getThesisBySlug, getRelatedTheses } from '../data/theses'
+import { useQuery } from '@tanstack/react-query'
+import { fetchThesisBySlug, fetchRelatedTheses } from '../lib/thesesApi'
 import { colleges } from '../data/colleges'
 
 export default function ThesisDetail() {
   const { slug } = useParams()
-  const thesis = getThesisBySlug(slug)
-  const related = getRelatedTheses(slug, 4)
   const [copied, setCopied] = useState(false)
+
+  const { data: thesis, isLoading, isError } = useQuery({
+    queryKey: ['thesis', slug],
+    queryFn: () => fetchThesisBySlug(slug),
+  })
+
+  const { data: related = [] } = useQuery({
+    queryKey: ['related-theses', thesis?.college, slug],
+    queryFn: () => fetchRelatedTheses(thesis.college, slug, 4),
+    enabled: !!thesis,
+  })
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -19,7 +29,16 @@ export default function ThesisDetail() {
     }
   }
 
-  if (!thesis) {
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center pt-24 gap-3 text-[var(--color-ink-muted)] dark:text-white/50">
+        <Loader2 size={28} className="animate-spin" aria-hidden="true" />
+        <span className="font-label text-sm">Loading thesis…</span>
+      </div>
+    )
+  }
+
+  if (isError || thesis === null) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center pt-24 gap-4">
         <h1 className="font-display text-3xl text-[var(--color-ink)] dark:text-white">Thesis not found</h1>

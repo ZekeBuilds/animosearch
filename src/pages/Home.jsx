@@ -5,7 +5,8 @@ import {
   Search, BookOpen, Users, Award, ArrowRight,
   Brain, Globe, FlaskConical, Building2, GraduationCap, Compass
 } from 'lucide-react'
-import { getFeaturedTheses } from '../data/theses'
+import { useQuery } from '@tanstack/react-query'
+import { fetchAllTheses } from '../lib/thesesApi'
 import { colleges } from '../data/colleges'
 
 /* ── Animated Counter ──────────────────────────────────── */
@@ -84,7 +85,8 @@ function ThesisCard({ thesis }) {
 
 /* ── Main Home Component ───────────────────────────────── */
 export default function Home() {
-  const featured = getFeaturedTheses(6)
+  const { data: allTheses = [] } = useQuery({ queryKey: ['theses'], queryFn: fetchAllTheses })
+  const featured = allTheses.filter(t => t.featured).slice(0, 6)
   const topColleges = colleges.slice(0, 6)
 
   const stats = [
