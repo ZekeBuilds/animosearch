@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import {
   Search, BookOpen, Users, Award, ArrowRight,
-  Brain, Globe, FlaskConical, Building2, GraduationCap, Compass
+  Brain, Globe, FlaskConical, Building2, GraduationCap, Compass,
+  ChevronLeft, ChevronRight
 } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { fetchAllTheses } from '../lib/thesesApi'
@@ -80,6 +81,128 @@ function ThesisCard({ thesis }) {
         </div>
       </div>
     </Link>
+  )
+}
+
+/* ── Featured Carousel ─────────────────────────────────── */
+const CAROUSEL_INTERVAL = 4000
+
+function FeaturedCarousel({ featured }) {
+  const [current, setCurrent] = useState(0)
+  const [paused, setPaused] = useState(false)
+  const [cardW, setCardW] = useState(308) // w-72 (288px) + gap-5 (20px) default
+  const trackRef = useRef(null)
+  const total = featured.length
+
+  // Measure actual card width after paint (accounts for responsive sizing)
+  useEffect(() => {
+    const measure = () => {
+      requestAnimationFrame(() => {
+        if (trackRef.current?.firstChild) {
+          setCardW(trackRef.current.firstChild.offsetWidth + 20)
+        }
+      })
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [total])
+
+  // Auto-advance
+  useEffect(() => {
+    if (paused || total === 0) return
+    const id = setInterval(() => setCurrent(c => (c + 1) % total), CAROUSEL_INTERVAL)
+    return () => clearInterval(id)
+  }, [paused, total])
+
+  const go = (i) => setCurrent(((i % total) + total) % total)
+
+  if (total === 0) return null
+
+  return (
+    <div
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      {/* Sliding track */}
+      <div
+        className="overflow-hidden"
+        style={{
+          paddingLeft: 'max(1.5rem, calc((100vw - 1280px) / 2 + 1.5rem))',
+        }}
+      >
+        <div
+          ref={trackRef}
+          className="flex gap-5 transition-transform duration-500 ease-in-out"
+          style={{ transform: `translateX(-${current * cardW}px)` }}
+          role="list"
+          aria-label="Featured theses carousel"
+        >
+          {featured.map((thesis, i) => (
+            <div
+              key={thesis.id}
+              className="h-[380px] flex-shrink-0 w-72 md:w-80"
+              role="listitem"
+            >
+              <ThesisCard thesis={thesis} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Controls row */}
+      <div className="container-lg mt-6 flex items-center justify-between">
+        {/* Dot indicators */}
+        <div className="flex items-center gap-2">
+          {featured.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => go(i)}
+              className={`rounded-full transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] ${
+                i === current
+                  ? 'w-5 h-2 bg-[var(--color-primary)]'
+                  : 'w-2 h-2 bg-[var(--color-border-light)] dark:bg-white/20 hover:bg-[var(--color-primary)]/50'
+              }`}
+              aria-label={`Go to thesis ${i + 1}`}
+              aria-current={i === current ? 'true' : undefined}
+            />
+          ))}
+        </div>
+
+        {/* Arrow buttons */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => go(current - 1)}
+            className="w-9 h-9 rounded-full border border-[var(--color-border-light)] dark:border-white/20 flex items-center justify-center text-[var(--color-ink-muted)] dark:text-white/60 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] dark:hover:text-[var(--color-primary-light)] transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
+            aria-label="Previous thesis"
+          >
+            <ChevronLeft size={16} aria-hidden="true" />
+          </button>
+          <button
+            onClick={() => go(current + 1)}
+            className="w-9 h-9 rounded-full border border-[var(--color-border-light)] dark:border-white/20 flex items-center justify-center text-[var(--color-ink-muted)] dark:text-white/60 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] dark:hover:text-[var(--color-primary-light)] transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
+            aria-label="Next thesis"
+          >
+            <ChevronRight size={16} aria-hidden="true" />
+          </button>
+        </div>
+      </div>
+
+      {/* Progress bar — restarts on slide change via key */}
+      <div className="container-lg mt-3">
+        <div className="h-0.5 bg-[var(--color-border-light)] dark:bg-white/10 rounded-full overflow-hidden w-24">
+          <div
+            key={`${current}-${paused}`}
+            className="h-full bg-[var(--color-primary)] rounded-full"
+            style={{
+              animation: paused
+                ? 'none'
+                : `carouselProgress ${CAROUSEL_INTERVAL}ms linear forwards`,
+            }}
+          />
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -336,32 +459,9 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Horizontal scroll */}
-        <div
-          className="flex gap-5 overflow-x-auto pb-4 px-6"
-          style={{
-            scrollbarWidth: 'thin',
-            scrollSnapType: 'x mandatory',
-            paddingLeft: 'max(1.5rem, calc((100vw - 1280px) / 2 + 1.5rem))',
-            paddingRight: 'max(1.5rem, calc((100vw - 1280px) / 2 + 1.5rem))',
-          }}
-          role="list"
-          aria-label="Featured theses"
-        >
-          {featured.map(thesis => (
-            <div
-              key={thesis.id}
-              className="h-[380px]"
-              style={{ scrollSnapAlign: 'start' }}
-              role="listitem"
-              data-aos="fade-up"
-            >
-              <ThesisCard thesis={thesis} />
-            </div>
-          ))}
-        </div>
+        <FeaturedCarousel featured={featured} />
 
-        <div className="text-center mt-8 md:hidden">
+        <div className="text-center mt-8 md:hidden container-lg">
           <Link to="/theses" className="btn-outline">
             View All Theses <ArrowRight size={14} aria-hidden="true" />
           </Link>

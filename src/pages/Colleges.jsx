@@ -57,7 +57,6 @@ export default function Colleges() {
                     : 'bg-white dark:bg-[var(--color-card-dark)] border border-[var(--color-border-light)] dark:border-white/10 hover:border-[var(--color-primary)] dark:hover:border-[var(--color-primary)]'
                 }`}
                 aria-pressed={activeCollege === college.id}
-                data-aos="fade-up"
               >
                 <div
                   className="h-1 w-full rounded-full mb-4"
@@ -84,7 +83,7 @@ export default function Colleges() {
 
           {/* College detail */}
           {selectedCollege && (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12" data-aos="fade-up">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
 
               {/* Department list + research areas */}
               <div className="bg-white dark:bg-[var(--color-card-dark)] rounded-2xl p-6 border border-[var(--color-border-light)] dark:border-white/10">
