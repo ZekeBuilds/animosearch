@@ -11,24 +11,30 @@ const ICON_MAP = {
   BookOpen,
 }
 
-function AccordionItem({ heading, content }) {
+function AccordionItem({ heading, content, index = 0 }) {
   const [open, setOpen] = useState(false)
   return (
-    <div className="border-b border-[var(--color-border-light)] dark:border-white/10 last:border-0">
+    <div
+      className="border-b border-[var(--color-border-light)] dark:border-white/10 last:border-0"
+      data-aos="fade-up"
+      data-aos-delay={index * 50}
+    >
       <button
         onClick={() => setOpen(o => !o)}
-        className="w-full flex items-center justify-between py-4 text-left cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded"
+        className="w-full flex items-center justify-between py-4 text-left cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded group"
         aria-expanded={open}
       >
-        <span className="font-semibold text-sm text-[var(--color-ink)] dark:text-white pr-4">{heading}</span>
+        <span className={`font-semibold text-sm pr-4 transition-colors duration-200 ${open ? 'text-[var(--color-primary)]' : 'text-[var(--color-ink)] dark:text-white group-hover:text-[var(--color-primary)]'}`}>
+          {heading}
+        </span>
         <ChevronDown
           size={16}
-          className={`text-[var(--color-primary)] flex-shrink-0 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+          className={`text-[var(--color-primary)] flex-shrink-0 transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
           aria-hidden="true"
         />
       </button>
       {open && (
-        <div className="pb-4 pr-6">
+        <div className="pb-4 pr-6" style={{ animation: 'slideDown 0.25s ease both' }}>
           <p className="text-sm text-[var(--color-ink-muted)] dark:text-white/70 leading-relaxed">{content}</p>
         </div>
       )}
@@ -65,13 +71,13 @@ export default function WritingGuide() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
 
             {/* Section nav */}
-            <aside>
+            <aside data-aos="fade-right">
               <nav aria-label="Guide sections">
                 <ul className="space-y-1">
                   {guideSections.map((section, idx) => {
                     const SIcon = ICON_MAP[section.icon] || BookOpen
                     return (
-                      <li key={section.id}>
+                      <li key={section.id} data-aos="fade-up" data-aos-delay={idx * 60}>
                         <button
                           onClick={() => setActiveSection(section.id)}
                           className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] ${
@@ -95,11 +101,11 @@ export default function WritingGuide() {
               </nav>
 
               {/* Quick facts */}
-              <div className="mt-8 bg-white dark:bg-[var(--color-card-dark)] rounded-2xl p-5 border border-[var(--color-border-light)] dark:border-white/10">
+              <div className="mt-8 bg-white dark:bg-[var(--color-card-dark)] rounded-2xl p-5 border border-[var(--color-border-light)] dark:border-white/10" data-aos="fade-up" data-aos-delay="400">
                 <h3 className="font-label text-xs text-[var(--color-ink-muted)] dark:text-white/40 mb-3">Quick Facts</h3>
                 <ul className="space-y-2.5">
                   {quickFacts.map((fact, idx) => (
-                    <li key={idx} className="flex items-start gap-2.5">
+                    <li key={idx} className="flex items-start gap-2.5" data-aos="fade-up" data-aos-delay={400 + idx * 60}>
                       <div className="w-1.5 h-1.5 rounded-full bg-[var(--color-secondary)] flex-shrink-0 mt-1.5" aria-hidden="true" />
                       <p className="text-xs text-[var(--color-ink-muted)] dark:text-white/60 leading-relaxed">
                         <span className="font-semibold text-[var(--color-ink)] dark:text-white/80">{fact.label}:</span> {fact.value}
@@ -111,7 +117,7 @@ export default function WritingGuide() {
             </aside>
 
             {/* Main content */}
-            <div className="lg:col-span-3" data-aos="fade-up">
+            <div className="lg:col-span-3" key={activeSection} style={{ animation: 'fadeInUp 0.35s ease both' }}>
               <div className="bg-white dark:bg-[var(--color-card-dark)] rounded-2xl border border-[var(--color-border-light)] dark:border-white/10 overflow-hidden">
 
                 {/* Section header */}
@@ -127,14 +133,14 @@ export default function WritingGuide() {
 
                 {/* Accordion items */}
                 <div className="p-6">
-                  {current.items.map(item => (
-                    <AccordionItem key={item.heading} heading={item.heading} content={item.content} />
+                  {current.items.map((item, i) => (
+                    <AccordionItem key={item.heading} heading={item.heading} content={item.content} index={i} />
                   ))}
                 </div>
 
                 {/* Pro tip */}
                 {current.proTip && (
-                  <div className="mx-6 mb-6 p-4 bg-[var(--color-secondary)]/10 dark:bg-[var(--color-secondary)]/5 rounded-xl border border-[var(--color-secondary)]/20">
+                  <div className="mx-6 mb-6 p-4 bg-[var(--color-secondary)]/10 dark:bg-[var(--color-secondary)]/5 rounded-xl border border-[var(--color-secondary)]/20" style={{ animation: 'fadeInUp 0.4s ease 0.2s both' }}>
                     <div className="flex items-start gap-3">
                       <Lightbulb size={16} className="text-[var(--color-secondary)] flex-shrink-0 mt-0.5" aria-hidden="true" />
                       <p className="text-sm text-[var(--color-ink-muted)] dark:text-white/70 leading-relaxed">

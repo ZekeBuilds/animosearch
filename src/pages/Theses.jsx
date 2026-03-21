@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { Search, X, BookOpen, Loader2 } from 'lucide-react'
@@ -64,6 +64,8 @@ export default function Theses() {
   const [college, setCollege] = useState('All')
   const [degreeLevel, setDegreeLevel] = useState('All')
   const [yearRange, setYearRange] = useState('All')
+  const [page, setPage] = useState(1)
+  const PAGE_SIZE = 20
 
   const { data: theses = [], isLoading, isError } = useQuery({
     queryKey: ['theses'],
@@ -92,6 +94,9 @@ export default function Theses() {
     })
   }, [search, college, degreeLevel, yearRange])
 
+  // Reset to page 1 whenever filters change
+  useEffect(() => { setPage(1) }, [search, college, degreeLevel, yearRange])
+
   const hasFilters = college !== 'All' || degreeLevel !== 'All' || yearRange !== 'All' || search
 
   const clearFilters = () => {
@@ -99,7 +104,11 @@ export default function Theses() {
     setCollege('All')
     setDegreeLevel('All')
     setYearRange('All')
+    setPage(1)
   }
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
+  const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 
   return (
     <>
@@ -216,11 +225,57 @@ export default function Theses() {
           )}
 
           {!isLoading && !isError && filtered.length > 0 && (
-            <div className="divide-y divide-[var(--color-border-light)] dark:divide-white/10">
-              {filtered.map(thesis => (
-                <ThesisRow key={thesis.id} thesis={thesis} />
-              ))}
-            </div>
+            <>
+              <div className="divide-y divide-[var(--color-border-light)] dark:divide-white/10">
+                {paginated.map(thesis => (
+                  <ThesisRow key={thesis.id} thesis={thesis} />
+                ))}
+              </div>
+
+              {totalPages > 1 && (
+                <div className="flex items-center justify-center gap-2 mt-10 pt-8 border-t border-[var(--color-border-light)] dark:border-white/10" data-aos="fade-up">
+                  <button
+                    onClick={() => { setPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                    disabled={page === 1}
+                    className="px-4 py-2 rounded-lg font-label text-xs border border-[var(--color-border-light)] dark:border-white/10 text-[var(--color-ink-muted)] dark:text-white/50 disabled:opacity-40 disabled:cursor-not-allowed hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-all cursor-pointer"
+                  >
+                    Previous
+                  </button>
+
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                      .filter(p => p === 1 || p === totalPages || Math.abs(p - page) <= 1)
+                      .map((p, idx, arr) => (
+                        <Fragment key={p}>
+                          {idx > 0 && arr[idx - 1] !== p - 1 && (
+                            <span className="text-[var(--color-ink-subtle)] dark:text-white/30 text-xs px-1">…</span>
+                          )}
+                          <button
+                            onClick={() => { setPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                            className={`w-9 h-9 rounded-lg font-label text-xs transition-all cursor-pointer ${
+                              page === p
+                                ? 'bg-[var(--color-primary)] text-white'
+                                : 'text-[var(--color-ink-muted)] dark:text-white/50 hover:bg-white dark:hover:bg-white/10 border border-[var(--color-border-light)] dark:border-white/10'
+                            }`}
+                            aria-current={page === p ? 'page' : undefined}
+                          >
+                            {p}
+                          </button>
+                        </Fragment>
+                      ))
+                    }
+                  </div>
+
+                  <button
+                    onClick={() => { setPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                    disabled={page === totalPages}
+                    className="px-4 py-2 rounded-lg font-label text-xs border border-[var(--color-border-light)] dark:border-white/10 text-[var(--color-ink-muted)] dark:text-white/50 disabled:opacity-40 disabled:cursor-not-allowed hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-all cursor-pointer"
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
+            </>
           )}
 
           {!isLoading && !isError && filtered.length === 0 && (

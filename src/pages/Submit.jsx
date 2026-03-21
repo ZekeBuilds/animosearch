@@ -143,7 +143,7 @@ export default function Submit() {
           <div className="max-w-2xl mx-auto">
 
             {/* Form type selector */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8" data-aos="fade-up">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
               {FORM_TYPES.map((type, i) => {
                 const Icon = type.icon
                 return (
@@ -155,8 +155,7 @@ export default function Submit() {
                         ? 'border-[var(--color-primary)] bg-white dark:bg-[var(--color-card-dark)]'
                         : 'border-[var(--color-border-light)] dark:border-white/10 bg-white dark:bg-[var(--color-card-dark)] hover:border-[var(--color-primary)]/50'
                     }`}
-                    data-aos="fade-up"
-                    data-aos-delay={i * 100}
+                    style={{ animation: `fadeInUp 0.4s ease ${i * 100}ms both` }}
                     aria-pressed={formType === type.id}
                   >
                     <div className="flex items-center gap-3 mb-2">
@@ -174,7 +173,7 @@ export default function Submit() {
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="bg-white dark:bg-[var(--color-card-dark)] rounded-2xl p-6 border border-[var(--color-border-light)] dark:border-white/10 space-y-5" noValidate data-aos="fade-up" data-aos-delay="150">
+            <form onSubmit={handleSubmit} className="bg-white dark:bg-[var(--color-card-dark)] rounded-2xl p-6 border border-[var(--color-border-light)] dark:border-white/10 space-y-5" noValidate style={{ animation: 'fadeInUp 0.4s ease 200ms both' }}>
 
               {/* Shared fields */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
