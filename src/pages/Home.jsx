@@ -2,11 +2,11 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import {
-  Waves, Mountain, Camera, Utensils, Star, ArrowRight,
-  ChevronDown, Globe, Users, MapPin, Compass, Shield, Clock
+  Search, BookOpen, Users, Award, ArrowRight,
+  Brain, Globe, FlaskConical, Building2, GraduationCap, Compass
 } from 'lucide-react'
-import { getFeaturedDestinations } from '../data/destinations'
-import { islandGroups } from '../data/regions'
+import { getFeaturedTheses } from '../data/theses'
+import { colleges } from '../data/colleges'
 
 /* ── Animated Counter ──────────────────────────────────── */
 function AnimatedCounter({ target, suffix = '', duration = 2000 }) {
@@ -40,68 +40,43 @@ function AnimatedCounter({ target, suffix = '', duration = 2000 }) {
   return <span ref={ref}>{count.toLocaleString()}{suffix}</span>
 }
 
-/* ── Star Rating ───────────────────────────────────────── */
-function StarRating({ rating }) {
-  return (
-    <div className="flex items-center gap-1" aria-label={`Rating: ${rating} out of 5`}>
-      {[1, 2, 3, 4, 5].map(i => (
-        <Star
-          key={i}
-          size={12}
-          strokeWidth={0}
-          fill={i <= Math.round(rating) ? '#F59E0B' : '#CBD5E0'}
-          aria-hidden="true"
-        />
-      ))}
-      <span className="text-xs text-[var(--color-ink-muted)] ml-1 font-medium">{rating}</span>
-    </div>
-  )
-}
+/* ── Thesis Card ───────────────────────────────────────── */
+function ThesisCard({ thesis }) {
+  const degreeLabel = thesis.degreeLevel === 'undergraduate' ? 'Undergrad'
+    : thesis.degreeLevel === 'graduate' ? 'Masteral'
+    : 'Doctoral'
 
-/* ── Destination Card ──────────────────────────────────── */
-function DestinationCard({ destination }) {
   return (
     <Link
-      to={`/destinations/${destination.slug}`}
-      className="group flex-shrink-0 w-64 md:w-72 rounded-2xl overflow-hidden bg-white dark:bg-[var(--color-card-dark)] shadow-[0_4px_20px_rgba(0,119,182,0.1)] hover:shadow-[0_8px_32px_rgba(0,119,182,0.2)] transition-all duration-300 hover:-translate-y-1 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
-      aria-label={`Explore ${destination.name}`}
+      to={`/theses/${thesis.slug}`}
+      className="group flex-shrink-0 w-72 md:w-80 rounded-2xl overflow-hidden bg-white dark:bg-[var(--color-card-dark)] shadow-[0_4px_20px_rgba(0,94,58,0.1)] hover:shadow-[0_8px_32px_rgba(0,94,58,0.2)] transition-all duration-300 hover:-translate-y-1 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
+      aria-label={`Read thesis: ${thesis.title}`}
     >
-      <div className="relative h-44 overflow-hidden">
-        <img
-          src={destination.image_url}
-          alt={`${destination.name}, ${destination.province}`}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-        <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
-          <span className="tag tag-blue bg-white/20 backdrop-blur-sm text-white border border-white/30">
-            {destination.island_group}
-          </span>
-          <span className={`tag text-white font-semibold backdrop-blur-sm border border-white/30 ${
-            destination.budget_level === 'Budget' ? 'bg-green-500/70' :
-            destination.budget_level === 'Mid-range' ? 'bg-[var(--color-secondary)]/70' :
-            'bg-purple-500/70'
-          }`}>
-            {destination.budget_level}
-          </span>
+      {/* Color header band by college */}
+      <div
+        className="h-2 w-full"
+        style={{ background: colleges.find(c => c.id === thesis.college.toLowerCase())?.color || 'var(--color-primary)' }}
+        aria-hidden="true"
+      />
+      <div className="p-5">
+        <div className="flex items-center justify-between gap-2 mb-3">
+          <span className="tag tag-blue">{thesis.college}</span>
+          <span className="tag tag-orange">{degreeLabel}</span>
         </div>
-      </div>
-
-      <div className="p-4">
-        <h3 className="font-display font-bold text-lg text-[var(--color-ink)] dark:text-white mb-1 group-hover:text-[var(--color-primary)] transition-colors">
-          {destination.name}
+        <h3 className="font-display font-bold text-base text-[var(--color-ink)] dark:text-white mb-2 leading-snug group-hover:text-[var(--color-primary)] transition-colors line-clamp-3">
+          {thesis.title}
         </h3>
-        <p className="flex items-center gap-1 text-xs text-[var(--color-ink-muted)] dark:text-white/50 mb-2">
-          <MapPin size={11} aria-hidden="true" />
-          {destination.province}
+        <p className="text-xs text-[var(--color-ink-muted)] dark:text-white/50 mb-3">
+          {thesis.author} · {thesis.year}
         </p>
-        <div className="flex flex-wrap gap-1 mb-3">
-          {destination.activities.slice(0, 2).map(act => (
-            <span key={act} className="tag tag-teal text-[0.6rem]">{act}</span>
+        <p className="text-xs text-[var(--color-ink-muted)] dark:text-white/60 leading-relaxed line-clamp-3">
+          {thesis.abstract}
+        </p>
+        <div className="flex flex-wrap gap-1 mt-3">
+          {thesis.keywords.slice(0, 3).map(kw => (
+            <span key={kw} className="tag tag-teal text-[0.6rem]">{kw}</span>
           ))}
         </div>
-        <StarRating rating={destination.rating} />
       </div>
     </Link>
   )
@@ -109,83 +84,83 @@ function DestinationCard({ destination }) {
 
 /* ── Main Home Component ───────────────────────────────── */
 export default function Home() {
-  const featured = getFeaturedDestinations(6)
+  const featured = getFeaturedTheses(6)
+  const topColleges = colleges.slice(0, 6)
 
   const stats = [
-    { value: 7641, label: 'Islands', suffix: '' },
-    { value: 81, label: 'Provinces', suffix: '' },
-    { value: 17, label: 'Regions', suffix: '' },
-    { value: 500, label: 'Species of Birds', suffix: '+' },
+    { value: 20000, label: 'Theses & Dissertations', suffix: '+' },
+    { value: 8, label: 'Colleges', suffix: '' },
+    { value: 50, label: 'Degree Programs', suffix: '+' },
+    { value: 2200, label: 'New Submissions/Year', suffix: '+' },
   ]
 
   const reasons = [
     {
-      icon: Waves,
-      title: 'World-Class Beaches',
-      desc: 'From Boracay\'s powdery white sand to El Nido\'s turquoise lagoons — consistently ranked among the world\'s best.',
+      icon: Search,
+      title: 'Smart Discovery',
+      desc: 'Search and filter 20,000+ DLSU theses by keyword, college, degree level, and year. Find relevant prior work in seconds.',
     },
     {
-      icon: Mountain,
-      title: 'Dramatic Landscapes',
-      desc: 'Volcano peaks, rice terrace amphitheaters, underground rivers, and highland pine forests that feel worlds apart.',
+      icon: Brain,
+      title: 'Real Research Data',
+      desc: 'All records sourced directly from the Animo Repository via OAI-PMH. Abstracts, keywords, authors, and degree details from the source.',
     },
     {
-      icon: Utensils,
-      title: 'Rich Food Culture',
-      desc: 'Lechon, adobo, sinigang, kare-kare — Filipino cuisine is a beautiful fusion of Malay, Spanish, Chinese, and American influences.',
+      icon: Award,
+      title: 'Planning Tools',
+      desc: 'Milestone planner, requirements checklist, budget estimator, and writing guide — everything you need from proposal to submission.',
     },
     {
       icon: Users,
-      title: 'Warmest People',
-      desc: 'The Philippines consistently ranks as one of the friendliest nations on earth. Hospitality here is not a policy — it\'s a way of life.',
+      title: 'Built for Lasallians',
+      desc: 'Designed specifically for DLSU students navigating the thesis process. Organized by the colleges and programs you know.',
     },
   ]
 
   const testimonials = [
     {
-      quote: "Walking through Vigan's cobblestone streets at night, with the gas lanterns lit — it felt like stepping into another century. The Philippines surprised me at every turn.",
-      author: 'Maria Santos',
-      role: 'Travel Photographer, Manila',
+      quote: "I spent two weeks searching Animo Repository manually. AnimoSearch helped me find five highly relevant theses in my topic area in under 10 minutes. This is genuinely useful.",
+      author: 'Mark Ramos',
+      role: 'CCS Graduate Student, Computer Science',
       avatar: 'M',
     },
     {
-      quote: "The first time I dove at Apo Island and a sea turtle swam right past me — that image will stay with me forever. This country's underwater world is simply unreal.",
-      author: 'James Wilson',
-      role: 'Dive Instructor, Cebu',
-      avatar: 'J',
+      quote: "The requirements checklist saved me from missing a critical submission deadline. I had no idea about the Turnitin similarity requirement until I saw it in the list.",
+      author: 'Sofia Dela Cruz',
+      role: 'COE Senior, Civil Engineering',
+      avatar: 'S',
     },
     {
-      quote: "I planned a 2-week trip and ended up staying for 6. There's something about the Philippines that makes leaving feel impossible. I keep coming back.",
-      author: 'Yuki Tanaka',
-      role: 'Freelance Writer, Tokyo',
-      avatar: 'Y',
+      quote: "Reading abstracts of past COB theses on similar topics helped me refine my own research question. I can see what approaches have already been tried and what angles are still open.",
+      author: 'James Uy',
+      role: 'COB Masteral Student, Finance',
+      avatar: 'J',
     },
   ]
 
   return (
     <>
       <Helmet>
-        <title>Lakbay PH — Your Journey Starts Here</title>
-        <meta name="description" content="Discover the best travel destinations in the Philippines. Explore 7,641 islands of beaches, mountains, heritage, and culture with Lakbay PH." />
+        <title>AnimoSearch — DLSU Thesis & Research Finder</title>
+        <meta name="description" content="Discover DLSU research. Browse, search, and explore 20,000+ theses and dissertations from De La Salle University's Animo Repository." />
       </Helmet>
 
       {/* ── HERO ──────────────────────────────────────────── */}
       <section
         className="relative min-h-screen flex items-center justify-center overflow-hidden"
-        aria-label="Hero: Welcome to Lakbay PH"
+        aria-label="Hero: Welcome to AnimoSearch"
       >
         {/* Background */}
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1573790387438-4da905039392?w=1600&q=85"
-            alt="El Nido, Palawan — dramatic limestone cliffs and turquoise water"
+            src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1600&q=85"
+            alt="University library interior with students studying"
             className="w-full h-full object-cover"
             loading="eager"
           />
           <div className="hero-overlay" />
-          {/* Subtle grain overlay */}
           <div
-            className="absolute inset-0 opacity-20 mix-blend-overlay"
+            className="absolute inset-0 opacity-10 mix-blend-overlay"
             style={{
               backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'1\'/%3E%3C/svg%3E")',
               backgroundSize: '128px 128px',
@@ -200,7 +175,7 @@ export default function Home() {
             className="font-label text-xs tracking-[0.2em] text-[var(--color-secondary-light)] mb-6 opacity-0 animate-fade-in-up"
             style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}
           >
-            Discover the Philippines
+            De La Salle University Research Discovery
           </span>
 
           <h1
@@ -213,8 +188,8 @@ export default function Home() {
               textShadow: '0 2px 20px rgba(0,0,0,0.3)',
             }}
           >
-            Your Journey<br />
-            <em className="not-italic" style={{ color: 'var(--color-secondary-light)' }}>Starts Here</em>
+            Discover DLSU Research.<br />
+            <em className="not-italic" style={{ color: 'var(--color-secondary-light)' }}>Start Your Own.</em>
           </h1>
 
           <p
@@ -225,20 +200,20 @@ export default function Home() {
               animationFillMode: 'forwards',
             }}
           >
-            7,641 islands. Endless discoveries. From world-class beaches to ancient rice terraces,
-            from colonial cities to volcanic peaks — explore the Philippines with confidence.
+            Search 20,000+ theses and dissertations from the Animo Repository.
+            Find prior work, discover research gaps, and plan your own thesis with purpose.
           </p>
 
           <div
             className="flex flex-wrap items-center justify-center gap-4 opacity-0 animate-fade-in-up"
             style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}
           >
-            <Link to="/destinations" className="btn-primary">
-              <Compass size={16} aria-hidden="true" />
-              Explore Destinations
+            <Link to="/theses" className="btn-primary">
+              <Search size={16} aria-hidden="true" />
+              Browse Theses
             </Link>
-            <Link to="/itinerary" className="btn-secondary">
-              Plan My Trip
+            <Link to="/guide" className="btn-secondary">
+              Writing Guide
               <ArrowRight size={16} aria-hidden="true" />
             </Link>
           </div>
@@ -254,15 +229,15 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 right-0 overflow-hidden leading-none" aria-hidden="true">
           <svg viewBox="0 0 1440 80" fill="none" preserveAspectRatio="none" style={{ height: '60px', width: '100%' }}>
             <path d="M0 80V40C360 0 720 80 1080 40C1260 20 1350 60 1440 40V80H0Z"
-              fill="var(--color-sky-bg)" className="dark:fill-[#0F1923]" />
+              fill="var(--color-sky-bg)" className="dark:fill-[#0D1F14]" />
           </svg>
         </div>
       </section>
 
       {/* ── STATS ─────────────────────────────────────────── */}
       <section
-        className="bg-[var(--color-sky-bg)] dark:bg-[#0F1923] py-16"
-        aria-label="Philippines by the numbers"
+        className="bg-[var(--color-sky-bg)] dark:bg-[#0D1F14] py-16"
+        aria-label="Animo Repository by the numbers"
       >
         <div className="container-lg">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -288,20 +263,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── WHY VISIT ─────────────────────────────────────── */}
+      {/* ── WHY ANIMOSEARCH ───────────────────────────────── */}
       <section
         className="section bg-white dark:bg-[#111820]"
-        aria-labelledby="why-visit-heading"
+        aria-labelledby="why-heading"
       >
         <div className="container-lg">
           <div className="text-center mb-14" data-aos="fade-up">
-            <span className="section-label">Why the Philippines</span>
+            <span className="section-label">Why AnimoSearch</span>
             <h2
               className="font-display font-bold text-[var(--color-ink)] dark:text-white"
-              id="why-visit-heading"
+              id="why-heading"
               style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)' }}
             >
-              A Country That Changes You
+              Research Starts Here
             </h2>
           </div>
 
@@ -328,25 +303,25 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── FEATURED DESTINATIONS ─────────────────────────── */}
+      {/* ── FEATURED THESES ───────────────────────────────── */}
       <section
-        className="section bg-[var(--color-sky-bg)] dark:bg-[#0F1923]"
+        className="section bg-[var(--color-sky-bg)] dark:bg-[#0D1F14]"
         aria-labelledby="featured-heading"
       >
         <div className="container-lg">
           <div className="flex items-end justify-between mb-10" data-aos="fade-up">
             <div>
-              <span className="section-label">Top Rated</span>
+              <span className="section-label">Recent & Notable</span>
               <h2
                 className="font-display font-bold text-[var(--color-ink)] dark:text-white"
                 id="featured-heading"
                 style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)' }}
               >
-                Featured Destinations
+                Featured Theses
               </h2>
             </div>
             <Link
-              to="/destinations"
+              to="/theses"
               className="hidden md:flex items-center gap-2 text-sm font-semibold text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] transition-colors cursor-pointer"
               style={{ fontFamily: 'var(--font-label)', letterSpacing: '0.05em', textTransform: 'uppercase', fontSize: '0.75rem' }}
             >
@@ -355,7 +330,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Horizontal scroll container */}
+        {/* Horizontal scroll */}
         <div
           className="flex gap-5 overflow-x-auto pb-4 px-6"
           style={{
@@ -365,75 +340,81 @@ export default function Home() {
             paddingRight: 'max(1.5rem, calc((100vw - 1280px) / 2 + 1.5rem))',
           }}
           role="list"
-          aria-label="Featured destinations"
+          aria-label="Featured theses"
         >
-          {featured.map(dest => (
+          {featured.map(thesis => (
             <div
-              key={dest.id}
+              key={thesis.id}
               style={{ scrollSnapAlign: 'start' }}
               role="listitem"
               data-aos="fade-up"
             >
-              <DestinationCard destination={dest} />
+              <ThesisCard thesis={thesis} />
             </div>
           ))}
         </div>
 
         <div className="text-center mt-8 md:hidden">
-          <Link to="/destinations" className="btn-outline">
-            View All Destinations <ArrowRight size={14} aria-hidden="true" />
+          <Link to="/theses" className="btn-outline">
+            View All Theses <ArrowRight size={14} aria-hidden="true" />
           </Link>
         </div>
       </section>
 
-      {/* ── ISLAND GROUPS ─────────────────────────────────── */}
+      {/* ── COLLEGES ──────────────────────────────────────── */}
       <section
         className="section bg-white dark:bg-[#111820]"
-        aria-labelledby="islands-heading"
+        aria-labelledby="colleges-heading"
       >
         <div className="container-lg">
           <div className="text-center mb-14" data-aos="fade-up">
-            <span className="section-label">Explore by Region</span>
+            <span className="section-label">Browse by College</span>
             <h2
               className="font-display font-bold text-[var(--color-ink)] dark:text-white"
-              id="islands-heading"
+              id="colleges-heading"
               style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)' }}
             >
-              Three Island Groups
+              8 Colleges. One Repository.
             </h2>
             <p className="mt-3 text-[var(--color-ink-muted)] dark:text-white/60 max-w-xl mx-auto text-sm leading-relaxed">
-              Luzon, Visayas, and Mindanao — each with a distinct character, landscape, and culture worth exploring.
+              Explore research by college and drill down to specific departments. Each college has its own research thrust areas and thesis conventions.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {islandGroups.map((group, i) => (
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {topColleges.map((college, i) => (
               <Link
-                key={group.id}
-                to={`/regions?group=${group.id}`}
-                className="group relative rounded-2xl overflow-hidden aspect-[4/3] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-4"
+                key={college.id}
+                to={`/colleges`}
+                className="group relative rounded-2xl overflow-hidden bg-white dark:bg-[var(--color-card-dark)] border border-[var(--color-border-light)] dark:border-white/10 p-5 hover:border-[var(--color-primary)] dark:hover:border-[var(--color-primary)] hover:shadow-[0_4px_20px_rgba(0,94,58,0.12)] transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
                 data-aos="fade-up"
-                data-aos-delay={i * 150}
-                aria-label={`Explore ${group.name}`}
+                data-aos-delay={i * 80}
+                aria-label={`Explore ${college.abbreviation} — ${college.name}`}
               >
-                <img
-                  src={group.image_url}
-                  alt={`${group.name} — ${group.tagline}`}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0F1923]/80 via-[#0F1923]/30 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <div className="w-3 h-3 rounded-full mb-3" style={{ background: group.color }} aria-hidden="true" />
-                  <h3 className="font-display font-bold text-white text-2xl mb-1">{group.name}</h3>
-                  <p className="text-white/70 text-sm mb-3">{group.tagline}</p>
-                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-[var(--color-accent)] group-hover:gap-2 transition-all"
-                    style={{ fontFamily: 'var(--font-label)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-                    Explore <ArrowRight size={12} aria-hidden="true" />
-                  </span>
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center mb-3"
+                  style={{ background: college.color + '20' }}
+                  aria-hidden="true"
+                >
+                  <div className="w-3 h-3 rounded-full" style={{ background: college.color }} />
                 </div>
+                <p className="font-display font-bold text-lg text-[var(--color-ink)] dark:text-white group-hover:text-[var(--color-primary)] transition-colors">
+                  {college.abbreviation}
+                </p>
+                <p className="text-xs text-[var(--color-ink-muted)] dark:text-white/50 mb-2 leading-tight">
+                  {college.name}
+                </p>
+                <p className="font-label text-xs text-[var(--color-primary)] dark:text-[var(--color-secondary)]">
+                  {college.thesisCount.toLocaleString()} theses
+                </p>
               </Link>
             ))}
+          </div>
+
+          <div className="text-center mt-8" data-aos="fade-up">
+            <Link to="/colleges" className="btn-outline">
+              <Building2 size={14} aria-hidden="true" /> Explore All Colleges
+            </Link>
           </div>
         </div>
       </section>
@@ -441,22 +422,21 @@ export default function Home() {
       {/* ── TESTIMONIALS ─────────────────────────────────── */}
       <section
         className="section relative overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, var(--color-primary) 0%, #004E7C 100%)' }}
+        style={{ background: 'linear-gradient(135deg, var(--color-primary) 0%, #003D25 100%)' }}
         aria-labelledby="testimonials-heading"
       >
-        {/* Decorative circles */}
-        <div className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-10" style={{ background: 'var(--color-accent)', transform: 'translate(30%, -30%)' }} aria-hidden="true" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full opacity-10" style={{ background: 'var(--color-secondary)', transform: 'translate(-30%, 30%)' }} aria-hidden="true" />
+        <div className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-10" style={{ background: 'var(--color-secondary)', transform: 'translate(30%, -30%)' }} aria-hidden="true" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full opacity-10" style={{ background: 'var(--color-accent)', transform: 'translate(-30%, 30%)' }} aria-hidden="true" />
 
         <div className="relative container-lg">
           <div className="text-center mb-12" data-aos="fade-up">
-            <span className="font-label text-xs tracking-[0.15em] text-[var(--color-secondary-light)] block mb-2">Traveler Stories</span>
+            <span className="font-label text-xs tracking-[0.15em] text-[var(--color-secondary-light)] block mb-2">Student Voices</span>
             <h2
               className="font-display font-bold text-white"
               id="testimonials-heading"
               style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)' }}
             >
-              Voices from the Islands
+              From Lasallian Researchers
             </h2>
           </div>
 
@@ -494,18 +474,18 @@ export default function Home() {
 
       {/* ── CTA BANNER ───────────────────────────────────── */}
       <section
-        className="section bg-[var(--color-sky-bg)] dark:bg-[#0F1923]"
+        className="section bg-[var(--color-sky-bg)] dark:bg-[#0D1F14]"
         aria-labelledby="cta-heading"
       >
         <div className="container-lg">
           <div
             className="rounded-3xl overflow-hidden relative"
-            style={{ background: 'linear-gradient(135deg, var(--color-ink) 0%, #1a3a5c 100%)' }}
+            style={{ background: 'linear-gradient(135deg, var(--color-ink) 0%, #0A2516 100%)' }}
             data-aos="fade-up"
           >
-            <div className="absolute right-0 top-0 bottom-0 w-1/2 opacity-20 hidden lg:block" aria-hidden="true">
+            <div className="absolute right-0 top-0 bottom-0 w-1/2 opacity-10 hidden lg:block" aria-hidden="true">
               <img
-                src="https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?w=800&q=70"
+                src="https://images.unsplash.com/photo-1532012197267-da84d127e765?w=800&q=70"
                 alt=""
                 className="w-full h-full object-cover"
                 loading="lazy"
@@ -514,24 +494,24 @@ export default function Home() {
             </div>
 
             <div className="relative p-10 md:p-16 max-w-lg">
-              <span className="section-label" style={{ color: 'var(--color-secondary-light)' }}>Ready to Explore?</span>
+              <span className="section-label" style={{ color: 'var(--color-secondary-light)' }}>Start Your Research Journey</span>
               <h2
                 className="font-display font-bold text-white mb-4"
                 id="cta-heading"
                 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.75rem)' }}
               >
-                Discover 20+ Destinations Waiting for You
+                20,000+ Theses Waiting to Inform Your Research
               </h2>
               <p className="text-white/70 text-sm leading-relaxed mb-8">
-                From beach paradises to mountain retreats, UNESCO heritage cities to world-class dive spots — your perfect Philippine adventure is just a click away.
+                Every great thesis builds on what came before. Browse the Animo Repository, find your research gap, and use our tools to plan your journey from proposal to defense.
               </p>
               <div className="flex flex-wrap gap-4">
-                <Link to="/destinations" className="btn-primary">
-                  <Globe size={16} aria-hidden="true" />
-                  Browse All Destinations
+                <Link to="/theses" className="btn-primary">
+                  <Search size={16} aria-hidden="true" />
+                  Browse All Theses
                 </Link>
                 <Link to="/quiz" className="btn-secondary">
-                  Take the PH Quiz
+                  Take the Research Quiz
                 </Link>
               </div>
             </div>

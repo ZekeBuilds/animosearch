@@ -5,10 +5,10 @@ import { CheckCircle2, XCircle, Trophy, RotateCcw, ArrowRight } from 'lucide-rea
 import { quizQuestions } from '../data/quizQuestions'
 
 const SCORE_TIERS = [
-  { min: 9, label: 'Philippine Expert!', emoji: '🏆', color: 'var(--color-secondary)', message: "Outstanding! You clearly know and love the Philippines. Your Lakbay awaits!" },
-  { min: 7, label: 'Island Hopper', emoji: '⛵', color: 'var(--color-primary)', message: "Great score! You know the Philippines well. Time to explore the islands you haven't visited yet." },
-  { min: 5, label: 'Curious Traveler', emoji: '🧭', color: 'var(--color-accent)', message: "Good start! The Philippines has so much more to discover. Explore the destinations and come back for more!" },
-  { min: 0, label: 'Future Lakbayer', emoji: '🌺', color: '#9B59B6', message: "Every journey starts somewhere! Explore the Philippines through Lakbay PH and you'll be an expert in no time." },
+  { min: 9, label: 'Research Scholar', color: 'var(--color-secondary)', message: "Outstanding! You clearly know your DLSU research culture. Your thesis will be exceptional." },
+  { min: 7, label: 'Graduate Researcher', color: 'var(--color-primary)', message: "Great score! You know DLSU and research methods well. Almost ready for that proposal defense." },
+  { min: 5, label: 'Thesis Candidate', color: 'var(--color-accent)', message: "Good start! Dig into the Writing Guide and browse more theses on AnimoSearch to sharpen your knowledge." },
+  { min: 0, label: 'First Year Student', color: '#9B59B6', message: "Every researcher starts somewhere. Explore AnimoSearch and use the Writing Guide to build your research foundation." },
 ]
 
 export default function Quiz() {
@@ -18,7 +18,7 @@ export default function Quiz() {
   const [score, setScore] = useState(0)
   const [finished, setFinished] = useState(false)
   const [highScore, setHighScore] = useState(() => {
-    try { return parseInt(localStorage.getItem('lakbay-quiz-highscore') || '0') } catch { return 0 }
+    try { return parseInt(localStorage.getItem('animosearch-quiz-highscore') || '0') } catch { return 0 }
   })
 
   const question = quizQuestions[current]
@@ -37,10 +37,9 @@ export default function Quiz() {
   const handleNext = () => {
     if (current + 1 >= total) {
       setFinished(true)
-      const finalScore = selected === question.correct ? score + 1 : score
-      if (finalScore > highScore) {
-        setHighScore(finalScore)
-        try { localStorage.setItem('lakbay-quiz-highscore', String(finalScore)) } catch {}
+      if (score > highScore) {
+        setHighScore(score)
+        try { localStorage.setItem('animosearch-quiz-highscore', String(score)) } catch {}
       }
     } else {
       setCurrent(c => c + 1)
@@ -53,15 +52,12 @@ export default function Quiz() {
     setCurrent(0); setSelected(null); setAnswered(false); setScore(0); setFinished(false)
   }
 
-  const finalScore = finished ? (answered && selected === question.correct ? score : score) : score
-
   if (finished) {
     return (
       <>
-        <Helmet><title>Quiz Results — Lakbay PH</title></Helmet>
-        <div className="min-h-screen bg-[var(--color-sky-bg)] dark:bg-[#0F1923] flex items-center justify-center px-4 pt-20">
+        <Helmet><title>Quiz Results — AnimoSearch</title></Helmet>
+        <div className="min-h-screen bg-[var(--color-sky-bg)] dark:bg-[#0D1F14] flex items-center justify-center px-4 pt-20">
           <div className="max-w-lg w-full text-center" data-aos="fade-up">
-            <div className="text-7xl mb-4" aria-hidden="true">{tier.emoji}</div>
             <h1 className="font-display font-bold text-3xl text-[var(--color-ink)] dark:text-white mb-2">{tier.label}</h1>
             <div className="text-6xl font-display font-bold mb-2" style={{ color: tier.color }}>
               {score}<span className="text-2xl text-[var(--color-ink-muted)] dark:text-white/50">/{total}</span>
@@ -75,8 +71,8 @@ export default function Quiz() {
               <button onClick={restart} className="btn-primary">
                 <RotateCcw size={16} aria-hidden="true" /> Play Again
               </button>
-              <Link to="/destinations" className="btn-outline">
-                Explore Destinations <ArrowRight size={16} aria-hidden="true" />
+              <Link to="/theses" className="btn-outline">
+                Browse Theses <ArrowRight size={16} aria-hidden="true" />
               </Link>
             </div>
           </div>
@@ -88,17 +84,17 @@ export default function Quiz() {
   return (
     <>
       <Helmet>
-        <title>Philippines Travel Quiz — Lakbay PH</title>
-        <meta name="description" content="Test your Philippines travel knowledge with our 10-question trivia quiz. Islands, culture, history, and nature." />
+        <title>DLSU Research Quiz — AnimoSearch</title>
+        <meta name="description" content="Test your DLSU and academic research knowledge with 10 trivia questions. Colleges, history, research methods, and Animo Repository." />
       </Helmet>
 
-      <div className="min-h-screen bg-[var(--color-sky-bg)] dark:bg-[#0F1923] flex items-center justify-center px-4 pt-20 pb-10">
+      <div className="min-h-screen bg-[var(--color-sky-bg)] dark:bg-[#0D1F14] flex items-center justify-center px-4 pt-20 pb-10">
         <div className="max-w-2xl w-full">
 
           {/* Header */}
           <div className="text-center mb-8">
-            <span className="section-label">Philippines Trivia</span>
-            <h1 className="font-display font-bold text-3xl text-[var(--color-ink)] dark:text-white">PH Travel Quiz</h1>
+            <span className="section-label">DLSU Research Trivia</span>
+            <h1 className="font-display font-bold text-3xl text-[var(--color-ink)] dark:text-white">Research Quiz</h1>
           </div>
 
           {/* Progress */}

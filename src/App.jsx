@@ -8,22 +8,22 @@ import Footer from './components/Footer'
 
 // Lazy load all pages for code-splitting
 const Home = lazy(() => import('./pages/Home'))
-const Destinations = lazy(() => import('./pages/Destinations'))
-const DestinationDetail = lazy(() => import('./pages/DestinationDetail'))
-const Regions = lazy(() => import('./pages/Regions'))
-const TravelTips = lazy(() => import('./pages/TravelTips'))
-const ItineraryBuilder = lazy(() => import('./pages/ItineraryBuilder'))
-const PackingList = lazy(() => import('./pages/PackingList'))
-const Gallery = lazy(() => import('./pages/Gallery'))
+const Theses = lazy(() => import('./pages/Theses'))
+const ThesisDetail = lazy(() => import('./pages/ThesisDetail'))
+const Colleges = lazy(() => import('./pages/Colleges'))
+const WritingGuide = lazy(() => import('./pages/WritingGuide'))
+const ResearchPlanner = lazy(() => import('./pages/ResearchPlanner'))
+const Checklist = lazy(() => import('./pages/Checklist'))
+const Showcase = lazy(() => import('./pages/Showcase'))
 const Quiz = lazy(() => import('./pages/Quiz'))
-const BudgetEstimator = lazy(() => import('./pages/BudgetEstimator'))
-const Contact = lazy(() => import('./pages/Contact'))
+const ThesisBudget = lazy(() => import('./pages/ThesisBudget'))
+const Submit = lazy(() => import('./pages/Submit'))
 const About = lazy(() => import('./pages/About'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
 function PageLoader() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[var(--color-sky-bg)] dark:bg-[#0F1923]">
+    <div className="min-h-screen flex items-center justify-center bg-[var(--color-sky-bg)] dark:bg-[#0D1F14]">
       <div className="flex flex-col items-center gap-3">
         <div className="w-8 h-8 border-2 border-[var(--color-border-light)] border-t-[var(--color-primary)] rounded-full animate-spin" aria-hidden="true" />
         <span className="font-label text-xs text-[var(--color-ink-muted)] dark:text-white/40">Loading…</span>
@@ -50,16 +50,16 @@ export default function App() {
           <Suspense fallback={<PageLoader />}>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/destinations" element={<Destinations />} />
-              <Route path="/destinations/:slug" element={<DestinationDetail />} />
-              <Route path="/regions" element={<Regions />} />
-              <Route path="/tips" element={<TravelTips />} />
-              <Route path="/itinerary" element={<ItineraryBuilder />} />
-              <Route path="/packing" element={<PackingList />} />
-              <Route path="/gallery" element={<Gallery />} />
+              <Route path="/theses" element={<Theses />} />
+              <Route path="/theses/:slug" element={<ThesisDetail />} />
+              <Route path="/colleges" element={<Colleges />} />
+              <Route path="/guide" element={<WritingGuide />} />
+              <Route path="/planner" element={<ResearchPlanner />} />
+              <Route path="/checklist" element={<Checklist />} />
+              <Route path="/showcase" element={<Showcase />} />
               <Route path="/quiz" element={<Quiz />} />
-              <Route path="/budget" element={<BudgetEstimator />} />
-              <Route path="/contact" element={<Contact />} />
+              <Route path="/budget" element={<ThesisBudget />} />
+              <Route path="/submit" element={<Submit />} />
               <Route path="/about" element={<About />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

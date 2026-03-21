@@ -1,30 +1,23 @@
 import { Link } from 'react-router-dom'
-import { MapPin, Instagram, Facebook, Youtube, Twitter, Mail, Phone, Heart } from 'lucide-react'
+import { BookOpen, Github, Mail, ExternalLink, Heart } from 'lucide-react'
 
-const EXPLORE_LINKS = [
-  { to: '/destinations', label: 'All Destinations' },
-  { to: '/regions', label: 'Regions Explorer' },
-  { to: '/gallery', label: 'Photo Gallery' },
-  { to: '/quiz', label: 'PH Travel Quiz' },
+const DISCOVER_LINKS = [
+  { to: '/theses', label: 'Browse Theses' },
+  { to: '/colleges', label: 'Colleges & Departments' },
+  { to: '/showcase', label: 'Research Showcase' },
+  { to: '/quiz', label: 'Research Quiz' },
 ]
 
 const TOOLS_LINKS = [
-  { to: '/itinerary', label: 'Itinerary Builder' },
-  { to: '/packing', label: 'Packing Checklist' },
-  { to: '/budget', label: 'Budget Estimator' },
-  { to: '/tips', label: 'Travel Tips' },
+  { to: '/planner', label: 'Research Planner' },
+  { to: '/checklist', label: 'Requirements Checklist' },
+  { to: '/budget', label: 'Thesis Budget' },
+  { to: '/guide', label: 'Writing Guide' },
 ]
 
 const INFO_LINKS = [
-  { to: '/about', label: 'About This Site' },
-  { to: '/contact', label: 'Trip Inquiry' },
-]
-
-const SOCIAL = [
-  { icon: Instagram, label: 'Instagram', href: '#' },
-  { icon: Facebook, label: 'Facebook', href: '#' },
-  { icon: Youtube, label: 'YouTube', href: '#' },
-  { icon: Twitter, label: 'X / Twitter', href: '#' },
+  { to: '/about', label: 'About AnimoSearch' },
+  { to: '/submit', label: 'Submit / Contact' },
 ]
 
 export default function Footer() {
@@ -32,7 +25,7 @@ export default function Footer() {
 
   return (
     <footer
-      className="bg-[var(--color-ink)] dark:bg-[#080F17] text-white/80"
+      className="bg-[var(--color-ink)] dark:bg-[#080F0D] text-white/80"
       role="contentinfo"
     >
       {/* Wave separator */}
@@ -49,7 +42,7 @@ export default function Footer() {
           <path
             d="M0 60V30C240 0 480 60 720 30C960 0 1200 60 1440 30V60H0Z"
             fill="var(--color-sky-bg)"
-            className="dark:fill-[#0F1923]"
+            className="dark:fill-[#0D1F14]"
           />
         </svg>
       </div>
@@ -61,50 +54,54 @@ export default function Footer() {
           <div className="lg:col-span-1">
             <Link
               to="/"
-              className="flex items-center gap-2 mb-4 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded-md"
-              aria-label="Lakbay PH — Home"
+              className="flex items-center gap-2 mb-4 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-secondary)] rounded-md"
+              aria-label="AnimoSearch — Home"
             >
               <span className="w-8 h-8 rounded-full bg-[var(--color-primary)] flex items-center justify-center">
-                <MapPin size={15} className="text-white" strokeWidth={2.5} />
+                <BookOpen size={15} className="text-white" strokeWidth={2.5} />
               </span>
               <span className="font-display font-bold text-xl text-white tracking-tight">
-                Lakbay<span className="text-[var(--color-secondary)]"> PH</span>
+                Animo<span className="text-[var(--color-secondary)]">Search</span>
               </span>
             </Link>
             <p className="text-sm leading-relaxed text-white/60 mb-6">
-              Your gateway to discovering the best of the Philippines — 7,641 islands of wonder, culture, and natural beauty.
+              Discover DLSU research. Start your own. Explore theses and dissertations from De La Salle University's Animo Repository.
             </p>
 
-            {/* Social icons */}
-            <div className="flex items-center gap-3" role="list" aria-label="Social media links">
-              {SOCIAL.map(({ icon: Icon, label, href }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={label}
-                  onClick={href === '#' ? (e) => e.preventDefault() : undefined}
-                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-[var(--color-primary)] flex items-center justify-center transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
-                  role="listitem"
-                >
-                  <Icon size={16} strokeWidth={2} />
-                </a>
-              ))}
+            {/* External links */}
+            <div className="space-y-2">
+              <a
+                href="https://animorepository.dlsu.edu.ph"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-xs text-white/50 hover:text-[var(--color-secondary)] transition-colors cursor-pointer focus-visible:outline-none focus-visible:text-[var(--color-secondary)]"
+              >
+                <ExternalLink size={12} aria-hidden="true" />
+                Animo Repository
+              </a>
+              <a
+                href="https://www.dlsu.edu.ph"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-xs text-white/50 hover:text-[var(--color-secondary)] transition-colors cursor-pointer focus-visible:outline-none focus-visible:text-[var(--color-secondary)]"
+              >
+                <ExternalLink size={12} aria-hidden="true" />
+                DLSU Official Website
+              </a>
             </div>
           </div>
 
-          {/* Explore links */}
+          {/* Discover links */}
           <div>
-            <h3 className="font-label text-xs tracking-wider uppercase text-[var(--color-accent)] mb-4">
-              Explore
+            <h3 className="font-label text-xs tracking-wider uppercase text-[var(--color-secondary)] mb-4">
+              Discover
             </h3>
             <ul className="space-y-2.5" role="list">
-              {EXPLORE_LINKS.map(({ to, label }) => (
+              {DISCOVER_LINKS.map(({ to, label }) => (
                 <li key={to}>
                   <Link
                     to={to}
-                    className="text-sm text-white/60 hover:text-white transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:text-[var(--color-accent)]"
+                    className="text-sm text-white/60 hover:text-white transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:text-[var(--color-secondary)]"
                   >
                     {label}
                   </Link>
@@ -115,15 +112,15 @@ export default function Footer() {
 
           {/* Tools links */}
           <div>
-            <h3 className="font-label text-xs tracking-wider uppercase text-[var(--color-accent)] mb-4">
-              Travel Tools
+            <h3 className="font-label text-xs tracking-wider uppercase text-[var(--color-secondary)] mb-4">
+              Research Tools
             </h3>
             <ul className="space-y-2.5" role="list">
               {TOOLS_LINKS.map(({ to, label }) => (
                 <li key={to}>
                   <Link
                     to={to}
-                    className="text-sm text-white/60 hover:text-white transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:text-[var(--color-accent)]"
+                    className="text-sm text-white/60 hover:text-white transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:text-[var(--color-secondary)]"
                   >
                     {label}
                   </Link>
@@ -134,7 +131,7 @@ export default function Footer() {
 
           {/* Info + Contact */}
           <div>
-            <h3 className="font-label text-xs tracking-wider uppercase text-[var(--color-accent)] mb-4">
+            <h3 className="font-label text-xs tracking-wider uppercase text-[var(--color-secondary)] mb-4">
               Information
             </h3>
             <ul className="space-y-2.5 mb-6" role="list">
@@ -142,7 +139,7 @@ export default function Footer() {
                 <li key={to}>
                   <Link
                     to={to}
-                    className="text-sm text-white/60 hover:text-white transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:text-[var(--color-accent)]"
+                    className="text-sm text-white/60 hover:text-white transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:text-[var(--color-secondary)]"
                   >
                     {label}
                   </Link>
@@ -153,11 +150,11 @@ export default function Footer() {
             <div className="space-y-2 text-sm text-white/50">
               <div className="flex items-center gap-2">
                 <Mail size={14} aria-hidden="true" />
-                <span>hello@lakbayphtravel.ph</span>
+                <span>animosearch@dlsu.edu.ph</span>
               </div>
               <div className="flex items-center gap-2">
-                <Phone size={14} aria-hidden="true" />
-                <span>+63 (2) 8XXX XXXX</span>
+                <Github size={14} aria-hidden="true" />
+                <span>LBYCPG3 Final Project</span>
               </div>
             </div>
           </div>
@@ -166,19 +163,19 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/40">
           <p>
-            &copy; {year} Lakbay PH. Built for LBYCPG3 Final Project.
+            &copy; {year} AnimoSearch. Built for LBYCPG3 Final Project.
           </p>
           <p className="flex items-center gap-1.5">
-            Made with <Heart size={12} className="text-[var(--color-secondary)]" aria-hidden="true" /> in the Philippines.
-            Photos from{' '}
+            Data from{' '}
             <a
-              href="https://unsplash.com"
+              href="https://animorepository.dlsu.edu.ph"
               target="_blank"
               rel="noopener noreferrer"
               className="underline underline-offset-2 hover:text-white/70 transition-colors cursor-pointer"
             >
-              Unsplash
+              Animo Repository
             </a>
+            {' '}· Made with <Heart size={12} className="text-[var(--color-secondary)]" aria-hidden="true" /> for DLSU
           </p>
         </div>
       </div>

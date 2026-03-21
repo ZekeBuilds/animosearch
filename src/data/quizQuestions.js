@@ -1,72 +1,115 @@
+// DLSU and Academic Research Trivia — 10 questions
 export const quizQuestions = [
   {
-    id: 1,
-    question: 'How many islands make up the Philippine archipelago?',
-    options: ['5,000', '7,641', '10,500', '3,200'],
-    correct: 1,
-    explanation: 'The Philippines consists of approximately 7,641 islands, making it one of the world\'s largest archipelago nations.',
-  },
-  {
-    id: 2,
-    question: 'Which is the highest mountain in the Philippines?',
-    options: ['Mt. Mayon', 'Mt. Apo', 'Mt. Pulag', 'Mt. Pinatubo'],
-    correct: 1,
-    explanation: 'Mt. Apo in Davao del Sur, Mindanao stands at 2,954 meters — the highest peak in the Philippines.',
-  },
-  {
-    id: 3,
-    question: 'The Chocolate Hills are located in which province?',
-    options: ['Cebu', 'Leyte', 'Bohol', 'Negros Oriental'],
-    correct: 2,
-    explanation: 'The Chocolate Hills are Bohol\'s most famous geological landmark — 1,268 symmetrical hills that turn brown in the dry season.',
-  },
-  {
-    id: 4,
-    question: 'Which Philippine beach is famous for powdery white sand and is consistently ranked one of the world\'s best?',
-    options: ['Nacpan Beach', 'White Beach Boracay', 'Alona Beach', 'Pagudpud Beach'],
-    correct: 1,
-    explanation: 'White Beach in Boracay is world-famous for its fine, powdery white sand and turquoise waters, regularly topping "best beaches" lists.',
-  },
-  {
-    id: 5,
-    question: 'What is the national bird of the Philippines?',
-    options: ['Maya (Eurasian Tree Sparrow)', 'Philippine Eagle', 'Palawan Peacock-Pheasant', 'Kalaw (Great Hornbill)'],
-    correct: 1,
-    explanation: 'The Philippine Eagle (Pithecophaga jefferyi) is the national bird — one of the world\'s largest and most powerful birds of prey, endemic to the Philippines.',
-  },
-  {
-    id: 6,
-    question: 'The Puerto Princesa Subterranean River is a UNESCO World Heritage Site in which province?',
-    options: ['Palawan', 'Batangas', 'Quezon', 'Samar'],
+    question: "What does DLSU stand for?",
+    options: [
+      "De La Salle University",
+      "De Los Santos University",
+      "De La Salle Unified",
+      "De La Salud University"
+    ],
     correct: 0,
-    explanation: 'The Puerto Princesa Underground River, one of the New 7 Wonders of Nature, is in Palawan — it is an 8.2km navigable underground river.',
+    explanation: "DLSU stands for De La Salle University, a private Catholic research university in Manila, Philippines, founded by the De La Salle Brothers in 1911."
   },
   {
-    id: 7,
-    question: 'Which city in the Philippines is known as the "Queen City of the South"?',
-    options: ['Davao City', 'Cebu City', 'Iloilo City', 'Zamboanga City'],
+    question: "What is the name of DLSU's official online thesis and research repository?",
+    options: [
+      "DLSU Digital Library",
+      "Animo Repository",
+      "LaSalle Research Hub",
+      "ResearchGate DLSU"
+    ],
     correct: 1,
-    explanation: 'Cebu City holds the title "Queen City of the South" — it is the oldest city in the Philippines, founded by the Spanish in 1565.',
+    explanation: "The Animo Repository (animorepository.dlsu.edu.ph) is DLSU's institutional repository housing theses, dissertations, faculty publications, and research outputs."
   },
   {
-    id: 8,
-    question: 'Siargao Island is known internationally as the surfing capital of the Philippines. Its most famous wave break is called:',
-    options: ['Jaws', 'Pipeline', 'Cloud 9', 'G-Land'],
+    question: "Which college at DLSU focuses on software engineering, artificial intelligence, and data science?",
+    options: [
+      "College of Science",
+      "Gokongwei College of Engineering",
+      "College of Computer Studies",
+      "College of Liberal Arts"
+    ],
     correct: 2,
-    explanation: 'Cloud 9 in Siargao is one of Asia\'s best surf breaks — a powerful, hollow reef break that hosts the annual Siargao Cloud 9 Surfing Cup.',
+    explanation: "The College of Computer Studies (CCS) houses DLSU's programs in Computer Science, Information Technology, and Software Technology, covering AI, data science, and cybersecurity research."
   },
   {
-    id: 9,
-    question: 'The Ifugao Rice Terraces in the Cordillera mountains are estimated to be how old?',
-    options: ['500 years', '1,000 years', '2,000 years', '5,000 years'],
-    correct: 2,
-    explanation: 'The Ifugao Rice Terraces are approximately 2,000 years old, carved by hand by the Ifugao people — a UNESCO World Heritage Site called the "Eighth Wonder of the World."',
-  },
-  {
-    id: 10,
-    question: 'Which Philippine city is a UNESCO World Heritage Site known for its Spanish colonial architecture and cobblestone streets?',
-    options: ['Manila', 'Vigan', 'Cebu', 'Iloilo'],
+    question: "What does OAI-PMH stand for in the context of digital repositories?",
+    options: [
+      "Open Access Internet Protocol — Metadata Hub",
+      "Open Archives Initiative Protocol for Metadata Harvesting",
+      "Online Academic Index Protocol — Metadata Holdings",
+      "Open API Integration — Publication Management Hub"
+    ],
     correct: 1,
-    explanation: 'Vigan in Ilocos Sur is a UNESCO World Heritage City — one of the best-preserved examples of Spanish colonial town planning in Asia.',
+    explanation: "OAI-PMH (Open Archives Initiative Protocol for Metadata Harvesting) is a standard protocol for sharing metadata between digital repositories, used by the Animo Repository to expose thesis records."
   },
+  {
+    question: "What year was De La Salle University established in Manila?",
+    options: [
+      "1905",
+      "1911",
+      "1919",
+      "1923"
+    ],
+    correct: 1,
+    explanation: "DLSU was founded on June 16, 1911, by the Brothers of the Christian Schools (De La Salle Brothers). It started as La Salle College in Paco, Manila."
+  },
+  {
+    question: "In academic research, what does 'IRB approval' typically refer to?",
+    options: [
+      "International Research Bibliography approval",
+      "Institutional Review Board approval for human subjects research",
+      "Internal Research Budget approval",
+      "Index of Research and Bibliography approval"
+    ],
+    correct: 1,
+    explanation: "IRB (Institutional Review Board) approval is required for research involving human subjects. It ensures that studies meet ethical standards for participant safety, consent, and data privacy."
+  },
+  {
+    question: "What citation format is most commonly required for DLSU theses?",
+    options: [
+      "MLA",
+      "Chicago/Turabian",
+      "APA",
+      "IEEE"
+    ],
+    correct: 2,
+    explanation: "APA (American Psychological Association) format is widely used across DLSU's colleges. The university has adopted APA 7th Edition as the standard for most departments."
+  },
+  {
+    question: "Which of the following best describes a 'thesis proposal defense'?",
+    options: [
+      "The final public presentation of completed research findings",
+      "An oral examination where a student defends their research plan before a panel",
+      "A written submission to the graduate school for topic approval",
+      "A review of literature conducted before data collection begins"
+    ],
+    correct: 1,
+    explanation: "A thesis proposal defense is an oral examination where a student presents and defends their research plan — including problem statement, objectives, methodology, and scope — before an academic panel."
+  },
+  {
+    question: "What is the DLSU Research Congress?",
+    options: [
+      "An annual student government meeting discussing research budgets",
+      "DLSU's annual multidisciplinary research conference for students and faculty",
+      "A national competition for Philippine university researchers",
+      "A quarterly journal published by DLSU's graduate school"
+    ],
+    correct: 1,
+    explanation: "The DLSU Research Congress is the university's annual multidisciplinary research conference where students and faculty present papers across all colleges, promoting a culture of scholarship."
+  },
+  {
+    question: "In research methodology, what distinguishes 'quantitative' from 'qualitative' approaches?",
+    options: [
+      "Quantitative uses numbers and statistics; qualitative uses words and observations",
+      "Quantitative is faster; qualitative is more accurate",
+      "Quantitative requires surveys; qualitative requires experiments",
+      "Quantitative is for science colleges only; qualitative is for arts colleges only"
+    ],
+    correct: 0,
+    explanation: "Quantitative research uses numerical data and statistical analysis. Qualitative research explores meaning, experience, and patterns through interviews, observations, and text. Many theses use mixed methods combining both approaches."
+  }
 ]
+
+export default quizQuestions

@@ -2,27 +2,27 @@
 
 @theme {
   /* ── Brand Colors ── */
-  --color-primary: #0077B6;
-  --color-primary-dark: #005A8E;
-  --color-primary-light: #0096D6;
-  --color-secondary: #F77F00;
-  --color-secondary-dark: #D46B00;
-  --color-secondary-light: #FF9A2E;
-  --color-accent: #2EC4B6;
-  --color-accent-dark: #23A89B;
-  --color-accent-light: #4FD8CC;
+  --color-primary: #005E3A;
+  --color-primary-dark: #004529;
+  --color-primary-light: #007A4B;
+  --color-secondary: #FFB81C;
+  --color-secondary-dark: #D99A00;
+  --color-secondary-light: #FFC83D;
+  --color-accent: #1B4F72;
+  --color-accent-dark: #154063;
+  --color-accent-light: #2E6E9E;
 
-  --color-sky-bg: #F0F9FF;
-  --color-sky-muted: #E0F2FE;
-  --color-border-light: #BAE6FD;
+  --color-sky-bg: #F4F9F4;
+  --color-sky-muted: #E8F4E8;
+  --color-border-light: #B8D8B8;
 
   --color-ink: #1A1A2E;
   --color-ink-muted: #4A5568;
   --color-ink-subtle: #718096;
 
   --color-card: #FFFFFF;
-  --color-card-dark: #1E2A3A;
-  --color-surface-dark: #0F1923;
+  --color-card-dark: #1A2E20;
+  --color-surface-dark: #0D1F14;
 
   /* ── Fonts ── */
   --font-display: "Playfair Display", Georgia, serif;
@@ -76,11 +76,11 @@
   /* Dark mode base */
   .dark body {
     background-color: var(--color-surface-dark);
-    color: #E8F4FD;
+    color: #E8F4E8;
   }
 
   .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
-    color: #F0F9FF;
+    color: #F0F9F0;
   }
 }
 
@@ -110,7 +110,7 @@
   .btn-primary:hover {
     background: var(--color-primary-dark);
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(0, 119, 182, 0.35);
+    box-shadow: 0 6px 20px rgba(0, 94, 58, 0.35);
   }
 
   .btn-secondary {
@@ -170,12 +170,12 @@
     background: var(--color-card);
     border-radius: 1rem;
     overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 119, 182, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 94, 58, 0.08);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
   }
 
   .card:hover {
-    box-shadow: 0 8px 32px rgba(0, 119, 182, 0.16);
+    box-shadow: 0 8px 32px rgba(0, 94, 58, 0.16);
     transform: translateY(-3px);
   }
 
@@ -199,33 +199,33 @@
   }
 
   .tag-blue {
-    background: rgba(0, 119, 182, 0.1);
+    background: rgba(0, 94, 58, 0.1);
     color: var(--color-primary);
   }
 
   .tag-orange {
-    background: rgba(247, 127, 0, 0.1);
+    background: rgba(255, 184, 28, 0.12);
     color: var(--color-secondary-dark);
   }
 
   .tag-teal {
-    background: rgba(46, 196, 182, 0.12);
+    background: rgba(27, 79, 114, 0.1);
     color: var(--color-accent-dark);
   }
 
   .dark .tag-blue {
-    background: rgba(0, 150, 214, 0.2);
-    color: #7DD3FC;
+    background: rgba(0, 122, 75, 0.25);
+    color: #6EE8A8;
   }
 
   .dark .tag-orange {
-    background: rgba(247, 127, 0, 0.2);
-    color: #FDB97D;
+    background: rgba(255, 184, 28, 0.2);
+    color: #FFD56B;
   }
 
   .dark .tag-teal {
-    background: rgba(46, 196, 182, 0.2);
-    color: #6EE7E0;
+    background: rgba(46, 110, 158, 0.25);
+    color: #7EB8D8;
   }
 
   /* Section container */
@@ -291,18 +291,18 @@
 
   .input:focus {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.12);
+    box-shadow: 0 0 0 3px rgba(0, 94, 58, 0.12);
   }
 
   .dark .input {
     background: var(--color-card-dark);
     border-color: rgba(255, 255, 255, 0.1);
-    color: #E8F4FD;
+    color: #E8F4E8;
   }
 
   .dark .input:focus {
     border-color: var(--color-primary-light);
-    box-shadow: 0 0 0 3px rgba(0, 150, 214, 0.2);
+    box-shadow: 0 0 0 3px rgba(0, 122, 75, 0.2);
   }
 
   /* Rating stars */
