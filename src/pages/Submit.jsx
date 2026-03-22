@@ -91,7 +91,7 @@ export default function Submit() {
 
     const { blocked, recent } = getRateLimitState()
     if (blocked) {
-      const oldestInWindow = Math.min(...recent)
+      const oldestInWindow = recent.length > 0 ? Math.min(...recent) : Date.now()
       const resetMins = Math.ceil((RATE_LIMIT_WINDOW_MS - (Date.now() - oldestInWindow)) / 60000)
       setErrors({ submit: `Too many submissions. Please wait ${resetMins} minute${resetMins !== 1 ? 's' : ''} before trying again.` })
       return
