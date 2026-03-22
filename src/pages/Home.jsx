@@ -1,10 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
-import {
-  Search, BookOpen, Users, Award, ArrowRight,
-  Brain, FlaskConical, Building2,
-} from 'lucide-react'
+import { Search, ArrowRight, Building2 } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { fetchAllTheses } from '../lib/thesesApi'
 import { colleges } from '../data/colleges'
@@ -170,22 +167,18 @@ export default function Home() {
 
   const reasons = [
     {
-      icon: Search,
       title: 'Smart Discovery',
       desc: 'Search and filter 20,000+ DLSU theses by keyword, college, degree level, and year. Find relevant prior work in seconds.',
     },
     {
-      icon: Brain,
       title: 'Real Research Data',
       desc: 'All records sourced directly from the Animo Repository via OAI-PMH. Abstracts, keywords, authors, and degree details from the source.',
     },
     {
-      icon: Award,
       title: 'Planning Tools',
       desc: 'Milestone planner, requirements checklist, budget estimator, and writing guide — everything you need from proposal to submission.',
     },
     {
-      icon: Users,
       title: 'Built for Lasallians',
       desc: 'Designed specifically for DLSU students navigating the thesis process. Organized by the colleges and programs you know.',
     },
@@ -350,7 +343,7 @@ export default function Home() {
         aria-labelledby="why-heading"
       >
         <div className="container-lg">
-          <div className="text-center mb-14" data-aos="fade-up">
+          <div className="mb-10" data-aos="fade-up">
             <span className="section-label">Why AnimoSearch</span>
             <h2
               className="font-display font-bold text-[var(--color-ink)] dark:text-white"
@@ -361,18 +354,29 @@ export default function Home() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {reasons.map(({ icon: Icon, title, desc }, i) => (
+          <div className="divide-y divide-[var(--color-border-light)] dark:divide-white/10 border-t border-[var(--color-border-light)] dark:border-white/10">
+            {reasons.map(({ title, desc }, i) => (
               <div
                 key={title}
-                className="flex flex-col items-start"
+                className="group py-8 sm:grid sm:grid-cols-[5rem_1fr_1.5fr] sm:items-start sm:gap-10"
                 data-aos="fade-up"
-                data-aos-delay={i * 100}
+                data-aos-delay={i * 80}
               >
-                <div className="w-12 h-12 rounded-xl bg-[var(--color-sky-bg)] dark:bg-[var(--color-primary)]/20 flex items-center justify-center mb-4">
-                  <Icon size={22} className="text-[var(--color-primary)]" aria-hidden="true" />
-                </div>
-                <h3 className="font-display font-semibold text-lg text-[var(--color-ink)] dark:text-white mb-2">
+                <span
+                  className="block font-bold leading-none mb-4 sm:mb-0 text-[#005E3A]/30 dark:text-white/25"
+                  style={{
+                    fontFamily: 'var(--font-stat)',
+                    fontSize: 'clamp(1.75rem, 3vw, 2.5rem)',
+                    letterSpacing: '-0.02em',
+                  }}
+                  aria-hidden="true"
+                >
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <h3
+                  className="font-display font-semibold text-[var(--color-ink)] dark:text-white group-hover:text-[var(--color-primary)] dark:group-hover:text-[var(--color-primary-light)] transition-colors duration-200 mb-2 sm:mb-0"
+                  style={{ fontSize: 'clamp(1.05rem, 2vw, 1.25rem)', lineHeight: 1.35 }}
+                >
                   {title}
                 </h3>
                 <p className="text-sm text-[var(--color-ink-muted)] dark:text-white/60 leading-relaxed">
