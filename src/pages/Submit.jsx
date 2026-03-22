@@ -3,6 +3,28 @@ import { Helmet } from 'react-helmet-async'
 import { Send, CheckCircle2, BookPlus, MessageSquare } from 'lucide-react'
 import { supabase } from '../lib/supabaseClient'
 
+const RATE_LIMIT_KEY = 'animosearch-submit-timestamps'
+const RATE_LIMIT_MAX = 3
+const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000 // 1 hour
+
+function getRateLimitState() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(RATE_LIMIT_KEY) || '[]')
+    const now = Date.now()
+    const recent = stored.filter(t => now - t < RATE_LIMIT_WINDOW_MS)
+    return { recent, blocked: recent.length >= RATE_LIMIT_MAX }
+  } catch {
+    return { recent: [], blocked: false }
+  }
+}
+
+function recordSubmission() {
+  try {
+    const { recent } = getRateLimitState()
+    localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify([...recent, Date.now()]))
+  } catch {}
+}
+
 const FORM_TYPES = [
   { id: 'missing', label: 'Submit a Missing Thesis', icon: BookPlus, description: 'Know of a DLSU thesis not in our database? Help us complete the record.' },
   { id: 'contact', label: 'General Inquiry', icon: MessageSquare, description: 'Questions, corrections, feedback, or anything else.' },
@@ -66,6 +88,15 @@ export default function Submit() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!validate()) return
+
+    const { blocked, recent } = getRateLimitState()
+    if (blocked) {
+      const oldestInWindow = Math.min(...recent)
+      const resetMins = Math.ceil((RATE_LIMIT_WINDOW_MS - (Date.now() - oldestInWindow)) / 60000)
+      setErrors({ submit: `Too many submissions. Please wait ${resetMins} minute${resetMins !== 1 ? 's' : ''} before trying again.` })
+      return
+    }
+
     setLoading(true)
     try {
       const payload = {
@@ -87,6 +118,7 @@ export default function Submit() {
       }
       const { error } = await supabase.from('submissions').insert([payload])
       if (error) throw error
+      recordSubmission()
       setSubmitted(true)
     } catch {
       setErrors({ submit: 'Something went wrong. Please try again or contact us directly.' })
