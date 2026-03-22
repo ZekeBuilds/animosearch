@@ -23,9 +23,9 @@ export default function ThesisDetail() {
 
   const handleShare = async () => {
     if (navigator.share) {
-      try { await navigator.share({ title: thesis?.title, text: `DLSU Thesis: ${thesis?.title}`, url: window.location.href }) } catch {}
+      try { await navigator.share({ title: thesis?.title, text: `DLSU Thesis: ${thesis?.title}`, url: window.location.href }) } catch { /* user cancelled */ }
     } else {
-      try { await navigator.clipboard.writeText(window.location.href); setCopied(true); setTimeout(() => setCopied(false), 2000) } catch {}
+      try { await navigator.clipboard.writeText(window.location.href); setCopied(true); setTimeout(() => setCopied(false), 2000) } catch { /* permission denied */ }
     }
   }
 
@@ -97,19 +97,7 @@ export default function ThesisDetail() {
 
       {/* Action bar */}
       <div className="bg-white dark:bg-[#1A2E20] border-b border-[var(--color-border-light)] dark:border-white/10">
-        <div className="container-lg py-4 flex flex-wrap gap-4 items-center justify-between">
-          <div className="flex flex-wrap gap-4">
-            {thesis.animoUrl && (
-              <a
-                href={thesis.animoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--color-primary)] text-white font-label text-xs hover:bg-[var(--color-primary-dark)] transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
-              >
-                <ExternalLink size={13} aria-hidden="true" /> View on Animo Repository
-              </a>
-            )}
-          </div>
+        <div className="container-lg py-4 flex flex-wrap gap-4 items-center justify-end">
           <button onClick={handleShare}
             className="flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--color-border-light)] dark:border-white/20 font-label text-xs text-[var(--color-primary)] hover:bg-[var(--color-sky-bg)] dark:hover:bg-white/5 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]">
             <Share2 size={13} aria-hidden="true" /> {copied ? 'Copied!' : 'Share'}
@@ -155,12 +143,12 @@ export default function ThesisDetail() {
               {/* Animo Repository link */}
               {thesis.animoUrl && (
                 <section>
-                  <h2 className="font-display font-bold text-2xl text-[var(--color-ink)] dark:text-white mb-4">Full Text</h2>
+                  <h2 className="font-display font-bold text-2xl text-[var(--color-ink)] dark:text-white mb-4">Animo Repository</h2>
                   <div className="bg-white dark:bg-[var(--color-card-dark)] rounded-xl p-5 border border-[var(--color-border-light)] dark:border-white/10 flex gap-4 items-start">
                     <ExternalLink size={20} className="text-[var(--color-primary)] flex-shrink-0 mt-0.5" aria-hidden="true" />
                     <div>
                       <p className="text-sm text-[var(--color-ink-muted)] dark:text-white/70 leading-relaxed mb-3">
-                        The full text of this thesis is available on the Animo Repository, DLSU's institutional digital library.
+                        This thesis is catalogued on the Animo Repository, DLSU's institutional digital library. Full text availability depends on the author's access settings and any embargo period.
                       </p>
                       <a
                         href={thesis.animoUrl}
@@ -168,7 +156,7 @@ export default function ThesisDetail() {
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 font-label text-xs text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] cursor-pointer transition-colors"
                       >
-                        Access on Animo Repository <ExternalLink size={12} aria-hidden="true" />
+                        View on Animo Repository <ExternalLink size={12} aria-hidden="true" />
                       </a>
                     </div>
                   </div>
