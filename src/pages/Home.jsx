@@ -227,7 +227,7 @@ export default function Home() {
         {/* Background */}
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1562774053-701939374585?w=1600&q=85"
+            src="https://images.unsplash.com/photo-1562774053-701939374585?w=1280&q=75&auto=format"
             alt="De La Salle University campus building"
             className="w-full h-full object-cover"
             loading="eager"
@@ -554,7 +554,7 @@ export default function Home() {
           >
             <div className="absolute right-0 top-0 bottom-0 w-1/2 opacity-10 hidden lg:block" aria-hidden="true">
               <img
-                src="https://images.unsplash.com/photo-1532012197267-da84d127e765?w=800&q=70"
+                src="https://images.unsplash.com/photo-1532012197267-da84d127e765?w=800&q=70&auto=format"
                 alt=""
                 className="w-full h-full object-cover"
                 loading="lazy"

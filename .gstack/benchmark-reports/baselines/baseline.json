@@ -1,0 +1,25 @@
+{
+  "url": "http://localhost:5173",
+  "timestamp": "2026-03-22T14:00:00Z",
+  "mode": "development",
+  "branch": "unknown",
+  "pages": {
+    "/": {
+      "ttfb_ms": 6,
+      "dom_interactive_ms": 288,
+      "dom_complete_ms": 531,
+      "full_load_ms": 531,
+      "total_requests": 29,
+      "total_transfer_kb": 3924,
+      "js_bundle_kb": 3350,
+      "css_bundle_kb": 1,
+      "slowest_resource_ms": 689,
+      "slowest_resource": "supabase /theses fetch"
+    },
+    "/theses": { "full_load_ms": 48, "dom_ready_ms": 45 },
+    "/colleges": { "full_load_ms": 60, "dom_ready_ms": 58 },
+    "/writing-guide": { "full_load_ms": 48, "dom_ready_ms": 46 },
+    "/submit": { "full_load_ms": 57, "dom_ready_ms": 56 },
+    "/about": { "full_load_ms": 62, "dom_ready_ms": 60 }
+  }
+}
