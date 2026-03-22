@@ -80,8 +80,8 @@ export default function Colleges() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p
-                    className="font-display font-bold text-base transition-colors"
-                    style={{ color: activeCollege === college.id ? college.color : 'var(--color-ink)' }}
+                    className={`font-display font-bold text-base transition-colors ${activeCollege === college.id ? '' : 'text-[var(--color-ink)] dark:text-white'}`}
+                    style={activeCollege === college.id ? { color: college.color } : {}}
                   >
                     {college.abbreviation}
                   </p>
