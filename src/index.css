@@ -28,9 +28,11 @@
   --color-surface-dark: #0D1F14;
 
   /* ── Fonts ── */
-  --font-display: "Playfair Display", Georgia, serif;
-  --font-body: Inter, system-ui, sans-serif;
-  --font-label: Montserrat, sans-serif;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Outfit", system-ui, sans-serif;
+  --font-label: "Josefin Sans", sans-serif;
+  --font-stat: "Fraunces", Georgia, serif;
+  --font-stat-label: "Josefin Sans", sans-serif;
 }
 
 /* ── Base ── */
@@ -55,7 +57,7 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
-    line-height: 1.2;
+    line-height: 1.25;
     color: var(--color-ink);
   }
 

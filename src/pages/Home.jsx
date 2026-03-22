@@ -327,12 +327,15 @@ export default function Home() {
                   <div className="absolute top-0 left-0 right-0 h-0.5 bg-[var(--color-primary)]" aria-hidden="true" />
                 )}
                 <div
-                  className="font-display font-bold text-[var(--color-primary)] dark:text-[var(--color-primary-light)] leading-none mb-2"
-                  style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}
+                  className="font-bold text-[var(--color-primary)] dark:text-[var(--color-primary-light)] leading-none mb-2"
+                  style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontFamily: 'var(--font-stat)', fontVariantNumeric: 'oldstyle-nums', letterSpacing: '-0.02em' }}
                 >
                   <AnimatedCounter target={value} suffix={suffix} />
                 </div>
-                <div className="font-label text-[0.65rem] text-[var(--color-ink-muted)] dark:text-white/50 text-center">
+                <div
+                  className="text-[0.65rem] text-[var(--color-ink-muted)] dark:text-white/50 text-center uppercase"
+                  style={{ fontFamily: 'var(--font-stat-label)', fontWeight: 400, letterSpacing: '0.12em' }}
+                >
                   {label}
                 </div>
               </div>
