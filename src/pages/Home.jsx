@@ -220,9 +220,9 @@ export default function Home() {
         {/* Background */}
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1562774053-701939374585?w=1280&q=75&auto=format"
-            alt="De La Salle University campus building"
-            className="w-full h-full object-cover"
+            src="/st-la-salle-hall.jpg"
+            alt="St. La Salle Hall, De La Salle University"
+            className="w-full h-full object-cover object-[center_37%]"
             loading="eager"
           />
           <div className="hero-overlay" />
