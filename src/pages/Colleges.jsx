@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { ChevronRight, BookOpen, ArrowRight } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
@@ -7,8 +7,16 @@ import { fetchAllTheses } from '../lib/thesesApi'
 import { colleges } from '../data/colleges'
 
 export default function Colleges() {
-  const [activeCollege, setActiveCollege] = useState(null)
+  const location = useLocation()
+  const [activeCollege, setActiveCollege] = useState(location.state?.college || null)
   const [activeDept, setActiveDept] = useState(null)
+
+  useEffect(() => {
+    if (location.state?.college && location.state.college !== activeCollege) {
+      setActiveCollege(location.state.college)
+      setActiveDept(null)
+    }
+  }, [location.state?.college])
 
   const { data: theses = [] } = useQuery({ queryKey: ['theses'], queryFn: fetchAllTheses })
 
@@ -56,8 +64,7 @@ export default function Colleges() {
                     ? 'bg-[var(--color-sky-bg)] dark:bg-[var(--color-primary)]/10'
                     : 'hover:bg-[var(--color-sky-bg)] dark:hover:bg-white/5'
                 }`}
-                data-aos="fade-up"
-                data-aos-delay={i * 50}
+                style={{ animation: `fadeInUp 0.4s ease ${i * 40}ms both` }}
                 aria-pressed={activeCollege === college.id}
               >
                 <div

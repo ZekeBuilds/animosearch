@@ -173,7 +173,7 @@ export default function Submit() {
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="bg-white dark:bg-[var(--color-card-dark)] rounded-2xl p-6 border border-[var(--color-border-light)] dark:border-white/10 space-y-5" noValidate style={{ animation: 'fadeInUp 0.4s ease 200ms both' }}>
+            <form key={formType} onSubmit={handleSubmit} className="bg-white dark:bg-[var(--color-card-dark)] rounded-2xl p-6 border border-[var(--color-border-light)] dark:border-white/10 space-y-5" noValidate style={{ animation: 'fadeInUp 0.35s ease both' }}>
 
               {/* Shared fields */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

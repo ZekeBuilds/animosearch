@@ -63,15 +63,21 @@ export default function Navbar() {
 
   const isToolsActive = TOOLS_LINKS.some(l => location.pathname === l.to)
 
-  const navBg = scrolled || mobileOpen
+  // Pages with a light background at the top (no dark hero) need the navbar opaque from the start
+  const LIGHT_TOP_ROUTES = ['/quiz', '/planner', '/checklist', '/budget']
+  const hasLightTop = LIGHT_TOP_ROUTES.includes(location.pathname)
+
+  const isOpaque = scrolled || mobileOpen || hasLightTop
+
+  const navBg = isOpaque
     ? 'bg-white/95 dark:bg-[#0D1F14]/95 backdrop-blur-md shadow-[0_2px_20px_rgba(0,0,0,0.08)]'
     : 'bg-transparent'
 
-  const linkColor = scrolled || mobileOpen
+  const linkColor = isOpaque
     ? 'text-[var(--color-ink)] dark:text-[#E8F4E8]'
     : 'text-white'
 
-  const activeStyle = scrolled || mobileOpen
+  const activeStyle = isOpaque
     ? 'text-[var(--color-primary)] dark:text-[var(--color-secondary)]'
     : 'text-white underline underline-offset-4 decoration-[var(--color-secondary)]'
 
@@ -93,7 +99,7 @@ export default function Navbar() {
           >
             <span className={`
               w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300
-              ${scrolled || mobileOpen
+              ${isOpaque
                 ? 'bg-[var(--color-primary)]'
                 : 'bg-white/20 border border-white/40'}
             `}>
@@ -105,12 +111,12 @@ export default function Navbar() {
             </span>
             <span className={`
               font-display font-bold text-xl tracking-tight transition-colors duration-300
-              ${scrolled || mobileOpen
+              ${isOpaque
                 ? 'text-[var(--color-primary)] dark:text-[var(--color-primary-light)]'
                 : 'text-white'}
             `}>
               Animo<span className={
-                scrolled || mobileOpen
+                isOpaque
                   ? 'text-[var(--color-secondary)]'
                   : 'text-[var(--color-secondary-light)]'
               }>Search</span>
@@ -200,7 +206,7 @@ export default function Navbar() {
               className={`
                 w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 cursor-pointer
                 focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:outline-none
-                ${scrolled || mobileOpen
+                ${isOpaque
                   ? 'bg-[var(--color-sky-muted)] dark:bg-white/10 text-[var(--color-ink)] dark:text-[#E8F4E8]'
                   : 'bg-white/15 text-white hover:bg-white/25'}
               `}
@@ -219,7 +225,7 @@ export default function Navbar() {
               className={`
                 lg:hidden w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 cursor-pointer
                 focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:outline-none
-                ${scrolled || mobileOpen
+                ${isOpaque
                   ? 'bg-[var(--color-sky-muted)] dark:bg-white/10 text-[var(--color-ink)] dark:text-[#E8F4E8]'
                   : 'bg-white/15 text-white hover:bg-white/25'}
               `}

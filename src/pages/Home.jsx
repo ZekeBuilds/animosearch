@@ -443,6 +443,7 @@ export default function Home() {
                 <Link
                   key={college.id}
                   to="/colleges"
+                  state={{ college: college.id }}
                   className={`group flex items-stretch min-h-[80px] hover:bg-[var(--color-sky-bg)] dark:hover:bg-white/5 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] border-[var(--color-border-light)] dark:border-white/10 ${i < topColleges.length - 2 ? 'border-b' : ''} ${i % 2 === 0 ? 'sm:border-r' : ''}`}
                   data-aos="fade-up"
                   data-aos-delay={i * 50}

@@ -8,9 +8,12 @@ import { colleges } from '../data/colleges'
 
 const COLLEGE_FILTERS = ['All', ...colleges.map(c => c.abbreviation)]
 
+const PER_PAGE = 10
+
 export default function Showcase() {
   const [activeCollege, setActiveCollege] = useState('All')
   const [lightbox, setLightbox] = useState(null)
+  const [page, setPage] = useState(1)
 
   const { data: theses = [] } = useQuery({ queryKey: ['theses'], queryFn: fetchAllTheses })
 
@@ -18,6 +21,9 @@ export default function Showcase() {
   const filtered = activeCollege === 'All'
     ? featured
     : featured.filter(t => t.college === activeCollege)
+
+  const totalPages = Math.ceil(filtered.length / PER_PAGE)
+  const paginated = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE)
 
   const openThesis = lightbox ? theses.find(t => t.id === lightbox) : null
   const openCollege = openThesis ? colleges.find(c => c.id === openThesis.college.toLowerCase()) : null
@@ -49,7 +55,7 @@ export default function Showcase() {
             {COLLEGE_FILTERS.map(c => (
               <button
                 key={c}
-                onClick={() => setActiveCollege(c)}
+                onClick={() => { setActiveCollege(c); setPage(1) }}
                 className={`px-4 py-2 rounded-full font-label text-xs transition-all cursor-pointer border ${
                   activeCollege === c
                     ? 'bg-[var(--color-primary)] text-white border-[var(--color-primary)]'
@@ -73,7 +79,7 @@ export default function Showcase() {
             </div>
           ) : (
             <div className="divide-y divide-[var(--color-border-light)] dark:divide-white/10">
-              {filtered.map((thesis, i) => {
+              {paginated.map((thesis, i) => {
                 const college = colleges.find(c => c.id === thesis.college.toLowerCase())
                 return (
                   <article
@@ -113,6 +119,29 @@ export default function Showcase() {
                   </article>
                 )
               })}
+            </div>
+          )}
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-10">
+              <button
+                onClick={() => { setPage(p => p - 1); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                disabled={page === 1}
+                className="px-4 py-2 rounded-full font-label text-xs border border-[var(--color-border-light)] dark:border-white/10 bg-white dark:bg-white/10 text-[var(--color-ink-muted)] dark:text-white/60 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
+              >
+                ← Prev
+              </button>
+              <span className="font-label text-xs text-[var(--color-ink-muted)] dark:text-white/40 px-3">
+                {page} / {totalPages}
+              </span>
+              <button
+                onClick={() => { setPage(p => p + 1); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                disabled={page === totalPages}
+                className="px-4 py-2 rounded-full font-label text-xs border border-[var(--color-border-light)] dark:border-white/10 bg-white dark:bg-white/10 text-[var(--color-ink-muted)] dark:text-white/60 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
+              >
+                Next →
+              </button>
             </div>
           )}
 
