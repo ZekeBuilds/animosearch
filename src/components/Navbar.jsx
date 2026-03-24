@@ -200,21 +200,47 @@ export default function Navbar() {
 
           {/* Right side: dark mode + hamburger */}
           <div className="flex items-center gap-2">
+            {/* Sliding dark mode toggle */}
             <button
               onClick={toggleDark}
+              role="switch"
+              aria-checked={darkMode}
               aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-              className={`
-                w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 cursor-pointer
-                focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:outline-none
-                ${isOpaque
-                  ? 'bg-[var(--color-sky-muted)] dark:bg-white/10 text-[var(--color-ink)] dark:text-[#E8F4E8]'
-                  : 'bg-white/15 text-white hover:bg-white/25'}
-              `}
+              className="relative flex items-center cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-1 rounded-full"
+              style={{
+                width: 44,
+                height: 24,
+                borderRadius: 999,
+                padding: 2,
+                backgroundColor: darkMode
+                  ? 'var(--color-primary)'
+                  : isOpaque ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.25)',
+                border: isOpaque && !darkMode ? '1px solid rgba(0,0,0,0.12)' : '1px solid transparent',
+                transition: 'background-color 0.3s ease',
+                flexShrink: 0,
+              }}
             >
-              {darkMode
-                ? <Sun size={16} strokeWidth={2} />
-                : <Moon size={16} strokeWidth={2} />
-              }
+              <span
+                aria-hidden="true"
+                style={{
+                  width: 18,
+                  height: 18,
+                  borderRadius: '50%',
+                  backgroundColor: '#fff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transform: darkMode ? 'translateX(20px)' : 'translateX(0px)',
+                  transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                  boxShadow: '0 1px 4px rgba(0,0,0,0.18)',
+                  flexShrink: 0,
+                }}
+              >
+                {darkMode
+                  ? <Moon size={10} color="var(--color-primary)" strokeWidth={2.5} />
+                  : <Sun size={10} color="#f59e0b" strokeWidth={2.5} />
+                }
+              </span>
             </button>
 
             <button

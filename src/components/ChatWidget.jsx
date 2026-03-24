@@ -120,7 +120,57 @@ function ThesisRow({ thesis, onClick }) {
   )
 }
 
-function MessageBubble({ msg, onThesisClick }) {
+// Parses plain text and converts URLs to clickable links.
+// Internal AnimoSearch URLs use navigate (no page reload); external open in new tab.
+function renderText(text, navigate, isDark) {
+  const urlRegex = /https?:\/\/[^\s]+/g
+  const parts = []
+  let lastIndex = 0
+  let match
+
+  const linkStyle = {
+    color: isDark ? '#FFD466' : 'var(--color-secondary)',
+    textDecoration: 'underline',
+    textUnderlineOffset: '2px',
+    cursor: 'pointer',
+    background: 'none',
+    border: 'none',
+    padding: 0,
+    font: 'inherit',
+    fontSize: 'inherit',
+    lineHeight: 'inherit',
+    wordBreak: 'break-all',
+  }
+
+  while ((match = urlRegex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index))
+    }
+    const url = match[0].replace(/[.,!?;:]+$/, '') // strip trailing punctuation
+    const isInternal = url.includes('animosearch.vercel.app')
+
+    if (isInternal) {
+      const path = url.replace(/https?:\/\/animosearch\.vercel\.app/, '') || '/'
+      parts.push(
+        <button key={match.index} onClick={() => navigate(path)} style={linkStyle}>
+          {url}
+        </button>
+      )
+    } else {
+      parts.push(
+        <a key={match.index} href={url} target="_blank" rel="noopener noreferrer" style={linkStyle}>
+          {url}
+        </a>
+      )
+    }
+    lastIndex = match.index + match[0].length
+  }
+
+  if (lastIndex < text.length) parts.push(text.slice(lastIndex))
+  return parts
+}
+
+function MessageBubble({ msg, onThesisClick, isDark, navigate }) {
   const isUser = msg.role === 'user'
 
   return (
@@ -154,8 +204,8 @@ function MessageBubble({ msg, onThesisClick }) {
           maxWidth: '85%',
           padding: '0.625rem 0.875rem',
           borderRadius: isUser ? '1rem 1rem 0.25rem 1rem' : '1rem 1rem 1rem 0.25rem',
-          backgroundColor: isUser ? 'var(--color-primary)' : 'var(--color-card, #fff)',
-          color: isUser ? '#fff' : 'var(--color-ink)',
+          backgroundColor: isUser ? 'var(--color-primary)' : isDark ? '#1e3a28' : '#fff',
+          color: isUser ? '#fff' : isDark ? '#E8F4E8' : 'var(--color-ink)',
           fontFamily: 'var(--font-body)',
           fontSize: '0.8125rem',
           lineHeight: 1.6,
@@ -167,7 +217,7 @@ function MessageBubble({ msg, onThesisClick }) {
           wordBreak: 'break-word',
         }}
       >
-        {msg.content}
+        {isUser ? msg.content : renderText(msg.content, navigate, isDark)}
       </div>
 
       {/* Thesis suggestions */}
@@ -207,9 +257,22 @@ export default function ChatWidget() {
   const [hasUnread, setHasUnread] = useState(false)
   const [errorMsg, setErrorMsg] = useState(null)
 
+  const [isDark, setIsDark] = useState(() =>
+    document.documentElement.classList.contains('dark')
+  )
+
   const listRef = useRef(null)
   const inputRef = useRef(null)
   const panelRef = useRef(null)
+
+  // Track dark mode changes from the Navbar toggle
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains('dark'))
+    })
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+    return () => observer.disconnect()
+  }, [])
 
   // Scroll to bottom whenever messages change
   useEffect(() => {
@@ -218,11 +281,14 @@ export default function ChatWidget() {
     }
   }, [messages, loading])
 
-  // Focus input when panel opens
+  // Scroll to bottom and focus input when panel opens
   useEffect(() => {
     if (open) {
       setHasUnread(false)
-      setTimeout(() => inputRef.current?.focus(), 150)
+      setTimeout(() => {
+        if (listRef.current) listRef.current.scrollTop = listRef.current.scrollHeight
+        inputRef.current?.focus()
+      }, 150)
     }
   }, [open])
 
@@ -402,8 +468,8 @@ export default function ChatWidget() {
               borderRadius: '1rem',
               overflow: 'hidden',
               boxShadow: '0 24px 64px rgba(0,0,0,0.18), 0 4px 16px rgba(0,94,58,0.12)',
-              border: '1px solid rgba(0,0,0,0.08)',
-              backgroundColor: 'var(--color-card, #fff)',
+              border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.08)',
+              backgroundColor: isDark ? '#1A2E20' : '#fff',
             }}
           >
             {/* Header */}
@@ -531,13 +597,15 @@ export default function ChatWidget() {
                 flexDirection: 'column',
                 gap: '0.875rem',
                 scrollBehavior: 'smooth',
-                backgroundColor: 'var(--color-sky-bg, #F4F9F4)',
+                backgroundColor: isDark ? '#0D1F14' : '#F4F9F4',
               }}
             >
               {messages.map((msg) => (
                 <MessageBubble
                   key={msg.id}
                   msg={msg}
+                  isDark={isDark}
+                  navigate={navigate}
                   onThesisClick={handleThesisClick}
                 />
               ))}
@@ -562,9 +630,9 @@ export default function ChatWidget() {
                     style={{
                       display: 'inline-flex',
                       borderRadius: '1rem 1rem 1rem 0.25rem',
-                      backgroundColor: 'var(--color-card, #fff)',
+                      backgroundColor: isDark ? '#1e3a28' : '#fff',
                       boxShadow: '0 1px 4px rgba(0,0,0,0.07)',
-                      border: '1px solid rgba(0,0,0,0.06)',
+                      border: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.06)',
                     }}
                   >
                     <TypingDots />
@@ -577,8 +645,8 @@ export default function ChatWidget() {
             <div
               style={{
                 padding: '0.75rem',
-                borderTop: '1px solid rgba(0,0,0,0.07)',
-                backgroundColor: 'var(--color-card, #fff)',
+                borderTop: isDark ? '1px solid rgba(255,255,255,0.07)' : '1px solid rgba(0,0,0,0.07)',
+                backgroundColor: isDark ? '#1A2E20' : '#fff',
                 display: 'flex',
                 gap: '0.5rem',
                 alignItems: 'flex-end',
@@ -608,8 +676,10 @@ export default function ChatWidget() {
                   fontFamily: 'var(--font-body)',
                   fontSize: '0.8125rem',
                   lineHeight: 1.5,
-                  color: 'var(--color-ink)',
-                  backgroundColor: atCap ? 'rgba(0,0,0,0.03)' : 'var(--color-sky-bg)',
+                  color: isDark ? '#E8F4E8' : 'var(--color-ink)',
+                  backgroundColor: atCap
+                    ? (isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)')
+                    : (isDark ? '#0D1F14' : '#F4F9F4'),
                   maxHeight: 80,
                   overflowY: 'auto',
                   transition: 'border-color 0.15s',
@@ -665,8 +735,8 @@ export default function ChatWidget() {
             <div
               style={{
                 padding: '0.375rem 0.75rem',
-                borderTop: '1px solid rgba(0,0,0,0.05)',
-                backgroundColor: 'var(--color-card, #fff)',
+                borderTop: isDark ? '1px solid rgba(255,255,255,0.05)' : '1px solid rgba(0,0,0,0.05)',
+                backgroundColor: isDark ? '#1A2E20' : '#fff',
                 textAlign: 'center',
                 flexShrink: 0,
               }}
