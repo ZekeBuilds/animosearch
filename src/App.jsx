@@ -5,6 +5,7 @@ import 'aos/dist/aos.css'
 
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import ChatWidget from './components/ChatWidget'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -77,6 +78,7 @@ export default function App() {
           </Suspense>
         </main>
         <Footer />
+        <ChatWidget />
       </div>
     </BrowserRouter>
   )
