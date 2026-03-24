@@ -231,13 +231,33 @@ Deno.serve(async (req: Request) => {
       'please','thanks','need','want','looking','good','best','great',
       'research','thesis','theses','study','studies','paper','papers',
       'topic','topics','related','regarding','concerning',
-      // website/feature meta-words — prevent site-info questions from triggering thesis search
+      // website/feature meta-words
       'website','site','platform','page','pages','feature','features',
       'tool','tools','section','sections','offer','offers','offering',
-      'animosearch','animo','use','using','available','provide','provides',
+      'animosearch','animo','available','provide','provides',
+      // page names
+      'guide','guides','writing','planner','checklist','showcase','quiz',
+      'budget','calculator','browser','explorer','browse','submit','about',
+      'college','colleges','home','dashboard',
+      // navigation/action words
+      'use','using','used','find','where','go','visit','click','open',
+      'access','navigate','check','view','see','look','search','try',
+      'start','begin','create','make','get','link','url','locate',
+      // capability/question words
+      'work','works','working','support','supports','allow','allows',
+      'enable','enables','possible','able','can','does','have','has',
+      'exist','exists','contain','contains','include','includes',
+      // meta/descriptive words
+      'way','option','options','step','steps','process','method','manner',
+      'overview','info','information','details','detail','describe',
+      'explain','learn','list','display','show','choose','select',
+      // database/record meta words
+      'database','record','records','entry','entries','collection',
+      'document','documents','dissertation','dissertations','publication',
       // contact/ownership meta-words
-      'contact','message','owner','owners','concern','concerns','feedback',
+      'contact','owner','owners','concern','concerns','feedback',
       'email','reach','communicate','report','inquiry','inquire','team',
+      'message','send','reply','respond','response',
     ])
 
     function extractKeywords(text: string): string[] {
