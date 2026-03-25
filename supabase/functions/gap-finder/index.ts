@@ -59,13 +59,15 @@ Deno.serve(async (req: Request) => {
     const ipRaw = req.headers.get('x-forwarded-for') ?? req.headers.get('cf-connecting-ip') ?? 'unknown'
     const ip = ipRaw.split(',')[0].trim().slice(0, 64)
 
-    const { count: recentCount } = await supabase
+    const { count: recentCount, error: countError } = await supabase
       .from('chat_requests')
       .select('*', { count: 'exact', head: true })
       .eq('ip', ip)
       .gte('created_at', new Date(Date.now() - 60_000).toISOString())
 
-    if ((recentCount ?? 0) >= 10) {
+    if (countError) {
+      console.error('Rate limit check error:', countError.message)
+    } else if ((recentCount ?? 0) >= 10) {
       return json({ error: 'Too many requests. Please wait a moment before trying again.' }, 429)
     }
 

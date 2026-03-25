@@ -66,6 +66,7 @@ export default function Theses() {
   const [degreeLevel, setDegreeLevel] = useState('All')
   const [yearRange, setYearRange] = useState('All')
   const [page, setPage] = useState(1)
+  const [jumpInput, setJumpInput] = useState('')
 
   const { data: theses = [], isLoading, isError } = useQuery({
     queryKey: ['theses'],
@@ -274,6 +275,32 @@ export default function Theses() {
                   >
                     Next
                   </button>
+
+                  <form
+                    onSubmit={e => {
+                      e.preventDefault()
+                      const n = parseInt(jumpInput, 10)
+                      if (!isNaN(n)) {
+                        setPage(Math.max(1, Math.min(totalPages, n)))
+                        window.scrollTo({ top: 0, behavior: 'smooth' })
+                        setJumpInput('')
+                      }
+                    }}
+                    className="flex items-center gap-1.5 ml-2"
+                    aria-label="Go to page"
+                  >
+                    <label htmlFor="page-jump" className="font-label text-xs text-[var(--color-ink-subtle)] dark:text-white/30 whitespace-nowrap">Go to</label>
+                    <input
+                      id="page-jump"
+                      type="number"
+                      min={1}
+                      max={totalPages}
+                      value={jumpInput}
+                      onChange={e => setJumpInput(e.target.value)}
+                      placeholder={page}
+                      className="w-14 h-9 rounded-lg border border-[var(--color-border-light)] dark:border-white/10 bg-white dark:bg-[var(--color-card-dark)] text-center font-label text-xs text-[var(--color-ink)] dark:text-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                    />
+                  </form>
                 </div>
               )}
             </>

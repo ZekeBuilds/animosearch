@@ -70,9 +70,9 @@ function ThesisCard({ thesis }) {
         <p className="text-xs text-[var(--color-ink-muted)] dark:text-white/60 leading-relaxed line-clamp-3 flex-1">
           {thesis.abstract}
         </p>
-        <div className="flex flex-wrap gap-1 mt-3">
+        <div className="flex flex-wrap gap-1 mt-3 overflow-hidden max-h-[56px]">
           {thesis.keywords.slice(0, 3).map(kw => (
-            <span key={kw} className="tag tag-teal text-[0.6rem]">{kw}</span>
+            <span key={kw} className="tag tag-teal text-[0.6rem] whitespace-normal leading-tight">{kw}</span>
           ))}
         </div>
       </div>
