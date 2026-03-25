@@ -188,7 +188,7 @@ export default function Trends() {
               <p className="text-sm text-[var(--color-ink-muted)] dark:text-white/60 mb-6">Thesis output from 2000 to present, split by degree level.</p>
               <div className="bg-white dark:bg-[var(--color-card-dark)] rounded-2xl border border-[var(--color-border-light)] dark:border-white/10 p-6">
                 <ResponsiveContainer width="100%" height={300}>
-                  <AreaChart data={yearData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <AreaChart data={yearData} margin={{ top: 30, right: 10, left: -20, bottom: 0 }}>
                     <defs>
                       <linearGradient id="gGraduate" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%"  stopColor="#005E3A" stopOpacity={0.3} />
