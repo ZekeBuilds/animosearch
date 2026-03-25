@@ -199,8 +199,8 @@ export default function Trends() {
                         <stop offset="95%" stopColor="#FFB81C" stopOpacity={0.02} />
                       </linearGradient>
                       <linearGradient id="gUndergrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%"  stopColor="#1B4F72" stopOpacity={0.3} />
-                        <stop offset="95%" stopColor="#1B4F72" stopOpacity={0.02} />
+                        <stop offset="5%"  stopColor="#E63946" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#E63946" stopOpacity={0.02} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="currentColor" strokeOpacity={0.06} />
@@ -218,7 +218,7 @@ export default function Trends() {
                     />
                     <Area type="monotone" dataKey="graduate"     name="Master's"     stroke="#005E3A" strokeWidth={2} fill="url(#gGraduate)" />
                     <Area type="monotone" dataKey="doctoral"     name="Doctoral"     stroke="#FFB81C" strokeWidth={2} fill="url(#gDoctoral)" />
-                    <Area type="monotone" dataKey="undergraduate" name="Undergraduate" stroke="#1B4F72" strokeWidth={2} fill="url(#gUndergrad)" />
+                    <Area type="monotone" dataKey="undergraduate" name="Undergraduate" stroke="#E63946" strokeWidth={2} fill="url(#gUndergrad)" />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>

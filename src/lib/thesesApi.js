@@ -20,14 +20,25 @@ function normalize(row) {
 }
 
 export async function fetchAllTheses() {
-  const { data, error } = await supabase
-    .from('theses')
-    .select('id,slug,title,author,year,college,college_name,department,degree_level,abstract,keywords,animo_url,featured')
-    .order('year', { ascending: false })
-    .limit(2000)
+  const BATCH = 1000
+  let all = []
+  let from = 0
 
-  if (error) throw error
-  return data.map(normalize)
+  while (true) {
+    const { data, error } = await supabase
+      .from('theses')
+      .select('id,slug,title,author,year,college,college_name,department,degree_level,abstract,keywords,animo_url,featured')
+      .order('year', { ascending: false })
+      .range(from, from + BATCH - 1)
+
+    if (error) throw error
+    if (!data || data.length === 0) break
+    all = all.concat(data)
+    if (data.length < BATCH) break
+    from += BATCH
+  }
+
+  return all.map(normalize)
 }
 
 export async function fetchThesisBySlug(slug) {
