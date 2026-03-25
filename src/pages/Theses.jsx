@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, Fragment } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { Search, X, BookOpen, Loader2 } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
@@ -61,7 +61,8 @@ function ThesisRow({ thesis }) {
 }
 
 export default function Theses() {
-  const [search, setSearch] = useState('')
+  const [searchParams] = useSearchParams()
+  const [search, setSearch] = useState(() => searchParams.get('q') ?? '')
   const [college, setCollege] = useState('All')
   const [degreeLevel, setDegreeLevel] = useState('All')
   const [yearRange, setYearRange] = useState('All')
