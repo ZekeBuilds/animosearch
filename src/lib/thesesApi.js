@@ -24,6 +24,7 @@ export async function fetchAllTheses() {
     .from('theses')
     .select('id,slug,title,author,year,college,college_name,department,degree_level,abstract,keywords,animo_url,featured')
     .order('year', { ascending: false })
+    .limit(2000)
 
   if (error) throw error
   return data.map(normalize)

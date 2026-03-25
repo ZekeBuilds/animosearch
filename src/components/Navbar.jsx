@@ -18,10 +18,18 @@ const TOOLS_LINKS = [
   { to: '/quiz', label: 'Research Quiz' },
 ]
 
+const DISCOVER_LINKS = [
+  { to: '/trends', label: 'Research Trends' },
+  { to: '/topics', label: 'Topic Map' },
+  { to: '/gap-finder', label: 'Gap Finder' },
+]
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [toolsOpen, setToolsOpen] = useState(false)
+  const [discoverOpen, setDiscoverOpen] = useState(false)
+  const discoverRef = useRef(null)
   const [darkMode, setDarkMode] = useState(
     () => document.documentElement.classList.contains('dark')
   )
@@ -37,16 +45,23 @@ export default function Navbar() {
   useEffect(() => {
     setMobileOpen(false)
     setToolsOpen(false)
+    setDiscoverOpen(false)
   }, [location.pathname])
 
   useEffect(() => {
-    const handler = (e) => {
-      if (toolsRef.current && !toolsRef.current.contains(e.target)) {
-        setToolsOpen(false)
-      }
+    const onMouse = (e) => {
+      if (toolsRef.current && !toolsRef.current.contains(e.target)) setToolsOpen(false)
+      if (discoverRef.current && !discoverRef.current.contains(e.target)) setDiscoverOpen(false)
     }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
+    const onKey = (e) => {
+      if (e.key === 'Escape') { setToolsOpen(false); setDiscoverOpen(false) }
+    }
+    document.addEventListener('mousedown', onMouse)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('mousedown', onMouse)
+      document.removeEventListener('keydown', onKey)
+    }
   }, [])
 
   useEffect(() => {
@@ -62,6 +77,7 @@ export default function Navbar() {
   }
 
   const isToolsActive = TOOLS_LINKS.some(l => location.pathname === l.to)
+  const isDiscoverActive = DISCOVER_LINKS.some(l => location.pathname === l.to)
 
   // Pages with a light background at the top (no dark hero) need the navbar opaque from the start
   const LIGHT_TOP_ROUTES = ['/quiz', '/planner', '/checklist', '/budget']
@@ -196,6 +212,53 @@ export default function Navbar() {
                 </div>
               )}
             </li>
+            {/* Discover dropdown */}
+            <li ref={discoverRef} className="relative">
+              <button
+                onClick={() => setDiscoverOpen(prev => !prev)}
+                aria-expanded={discoverOpen}
+                aria-haspopup="menu"
+                className={`
+                  flex items-center gap-1 px-3 py-2 font-label text-xs font-semibold tracking-wider uppercase
+                  transition-colors duration-200 rounded-md cursor-pointer
+                  hover:text-[var(--color-secondary)] focus-visible:outline-none
+                  focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]
+                  ${isDiscoverActive ? activeStyle : linkColor}
+                `}
+              >
+                Discover
+                <ChevronDown
+                  size={14}
+                  strokeWidth={2.5}
+                  className={`transition-transform duration-200 ${discoverOpen ? 'rotate-180' : ''}`}
+                />
+              </button>
+
+              {discoverOpen && (
+                <div
+                  className="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-[#1A2E20] rounded-xl shadow-xl border border-[var(--color-border-light)] dark:border-white/10 overflow-hidden"
+                  role="menu"
+                >
+                  {DISCOVER_LINKS.map(({ to, label }) => (
+                    <NavLink
+                      key={to}
+                      to={to}
+                      role="menuitem"
+                      className={({ isActive }) => `
+                        block px-4 py-2.5 font-label text-xs tracking-wider uppercase
+                        transition-colors duration-150 cursor-pointer
+                        ${isActive
+                          ? 'bg-[var(--color-sky-muted)] text-[var(--color-primary)] dark:bg-[var(--color-primary)]/20 dark:text-[var(--color-secondary)]'
+                          : 'text-[var(--color-ink)] dark:text-[#E8F4E8] hover:bg-[var(--color-sky-bg)] dark:hover:bg-white/5 hover:text-[var(--color-secondary)]'
+                        }
+                      `}
+                    >
+                      {label}
+                    </NavLink>
+                  ))}
+                </div>
+              )}
+            </li>
           </ul>
 
           {/* Right side: dark mode + hamburger */}
@@ -297,6 +360,28 @@ export default function Navbar() {
                   </span>
                 </div>
                 {TOOLS_LINKS.map(({ to, label }) => (
+                  <NavLink
+                    key={to}
+                    to={to}
+                    className={({ isActive }) => `
+                      block px-6 py-2.5 rounded-xl font-label text-xs tracking-wider uppercase
+                      transition-colors duration-150 cursor-pointer
+                      ${isActive
+                        ? 'text-[var(--color-primary)] dark:text-[var(--color-secondary)]'
+                        : 'text-[var(--color-ink-muted)] dark:text-[#A0C8A0] hover:text-[var(--color-primary)]'}
+                    `}
+                  >
+                    — {label}
+                  </NavLink>
+                ))}
+              </li>
+              <li>
+                <div className="px-4 pt-3 pb-1">
+                  <span className="font-label text-xs tracking-wider uppercase text-[var(--color-ink-subtle)] dark:text-white/40">
+                    Discover
+                  </span>
+                </div>
+                {DISCOVER_LINKS.map(({ to, label }) => (
                   <NavLink
                     key={to}
                     to={to}

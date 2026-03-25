@@ -31,6 +31,9 @@ const ThesisBudget = lazy(() => import('./pages/ThesisBudget'))
 const Submit = lazy(() => import('./pages/Submit'))
 const About = lazy(() => import('./pages/About'))
 const NotFound = lazy(() => import('./pages/NotFound'))
+const Trends = lazy(() => import('./pages/Trends'))
+const TopicMap = lazy(() => import('./pages/TopicMap'))
+const GapFinder = lazy(() => import('./pages/GapFinder'))
 
 function PageLoader() {
   return (
@@ -73,6 +76,9 @@ export default function App() {
               <Route path="/budget" element={<ThesisBudget />} />
               <Route path="/submit" element={<Submit />} />
               <Route path="/about" element={<About />} />
+              <Route path="/trends" element={<Trends />} />
+              <Route path="/topics" element={<TopicMap />} />
+              <Route path="/gap-finder" element={<GapFinder />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>

@@ -1,14 +1,62 @@
 import { useParams, Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
-import { ExternalLink, Share2, ArrowLeft, Tag, GraduationCap, Building2, Calendar, Check, Loader2 } from 'lucide-react'
+import { ExternalLink, Share2, ArrowLeft, Tag, GraduationCap, Building2, Calendar, Check, Loader2, BookMarked, Copy, ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { fetchThesisBySlug, fetchRelatedTheses } from '../lib/thesesApi'
 import { colleges } from '../data/colleges'
 
+function CitationPanel({ thesis, degreeLabel }) {
+  const [citeCopied, setCiteCopied] = useState(null)
+
+  const degreeForCitation = thesis.degreeLevel === 'doctoral' ? 'Doctoral Dissertation'
+    : thesis.degreeLevel === 'undergraduate' ? 'Undergraduate Thesis'
+    : "Master's Thesis"
+
+  const citations = {
+    APA: `${thesis.author}. (${thesis.year}). ${thesis.title} [${degreeForCitation}, De La Salle University]. Animo Repository. ${thesis.animoUrl}`,
+    IEEE: `${thesis.author}, "${thesis.title}," ${degreeForCitation}, De La Salle University, Manila, Philippines, ${thesis.year}. [Online]. Available: ${thesis.animoUrl}`,
+    Chicago: `${thesis.author}. "${thesis.title}." ${degreeForCitation}, De La Salle University, ${thesis.year}. ${thesis.animoUrl}`,
+  }
+
+  const handleCopy = async (format) => {
+    try {
+      await navigator.clipboard.writeText(citations[format])
+      setCiteCopied(format)
+      setTimeout(() => setCiteCopied(null), 2000)
+    } catch { /* permission denied */ }
+  }
+
+  return (
+    <div className="bg-[var(--color-sky-bg)] dark:bg-[#0D1F14] border-b border-[var(--color-border-light)] dark:border-white/10">
+      <div className="container-lg py-6">
+        <p className="font-label text-xs text-[var(--color-ink-subtle)] dark:text-white/40 uppercase tracking-wider mb-4">Cite this thesis</p>
+        <div className="space-y-4">
+          {Object.entries(citations).map(([format, text]) => (
+            <div key={format} className="bg-white dark:bg-[var(--color-card-dark)] rounded-xl border border-[var(--color-border-light)] dark:border-white/10 p-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="font-label text-xs font-semibold text-[var(--color-primary)] tracking-widest">{format}</span>
+                <button
+                  onClick={() => handleCopy(format)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--color-border-light)] dark:border-white/20 font-label text-xs text-[var(--color-ink-muted)] dark:text-white/60 hover:text-[var(--color-primary)] hover:border-[var(--color-primary)] transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
+                  aria-label={`Copy ${format} citation`}
+                >
+                  {citeCopied === format ? <><Check size={11} /> Copied!</> : <><Copy size={11} /> Copy</>}
+                </button>
+              </div>
+              <p className="text-sm text-[var(--color-ink-muted)] dark:text-white/70 leading-relaxed font-mono">{text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function ThesisDetail() {
   const { slug } = useParams()
   const [copied, setCopied] = useState(false)
+  const [showCite, setShowCite] = useState(false)
 
   const { data: thesis, isLoading, isError } = useQuery({
     queryKey: ['thesis', slug],
@@ -58,7 +106,7 @@ export default function ThesisDetail() {
     <>
       <Helmet>
         <title>{thesis.title} — AnimoSearch</title>
-        <meta name="description" content={thesis.abstract.slice(0, 155) + '…'} />
+        <meta name="description" content={(thesis.abstract ?? '').slice(0, 155) + '…'} />
       </Helmet>
 
       {/* Hero */}
@@ -97,13 +145,21 @@ export default function ThesisDetail() {
 
       {/* Action bar */}
       <div className="bg-white dark:bg-[#1A2E20] border-b border-[var(--color-border-light)] dark:border-white/10">
-        <div className="container-lg py-4 flex flex-wrap gap-4 items-center justify-end">
+        <div className="container-lg py-4 flex flex-wrap gap-3 items-center justify-end">
+          <button onClick={() => setShowCite(v => !v)}
+            className="flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--color-border-light)] dark:border-white/20 font-label text-xs text-[var(--color-primary)] hover:bg-[var(--color-sky-bg)] dark:hover:bg-white/5 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
+            aria-expanded={showCite}>
+            <BookMarked size={13} aria-hidden="true" /> Cite
+            <ChevronDown size={11} className={`transition-transform duration-200 ${showCite ? 'rotate-180' : ''}`} aria-hidden="true" />
+          </button>
           <button onClick={handleShare}
             className="flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--color-border-light)] dark:border-white/20 font-label text-xs text-[var(--color-primary)] hover:bg-[var(--color-sky-bg)] dark:hover:bg-white/5 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]">
             <Share2 size={13} aria-hidden="true" /> {copied ? 'Copied!' : 'Share'}
           </button>
         </div>
       </div>
+
+      {showCite && <CitationPanel thesis={thesis} degreeLabel={degreeLabel} />}
 
       {/* Body */}
       <div className="bg-[var(--color-sky-bg)] dark:bg-[#0D1F14]">
@@ -171,7 +227,7 @@ export default function ThesisDetail() {
                 <dl className="space-y-4">
                   {[
                     ['Author', thesis.author],
-                    ['College', thesis.collegeName],
+                    ['College', thesis.collegeName ?? thesis.college],
                     ['Department', thesis.department],
                     ['Degree Level', degreeLabel],
                     ['Year', String(thesis.year)],
