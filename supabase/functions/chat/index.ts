@@ -55,8 +55,8 @@ PAGES AND FEATURES (know these thoroughly)
 8. SHOWCASE (/showcase)
    A curated collection of featured recent theses (2020–2024) across all 8 colleges. Good for discovering high-quality recent research and seeing what topics DLSU graduates have been studying lately.
 
-9. RESEARCH MATCH QUIZ (/quiz)
-   An interactive quiz that asks the user a series of questions about their interests, strengths, and goals, then suggests a research area or college that fits them. Great for students who are undecided about their thesis direction.
+9. RESEARCH QUIZ (/quiz)
+   A 10-question multiple-choice trivia quiz testing knowledge of DLSU, academic research, and the Animo Repository. Topics include DLSU history, college programs, citation formats (APA), research methodology, IRB approval, and the OAI-PMH protocol. At the end, users get a score and a tier label: Research Scholar (9-10), Graduate Researcher (7-8), Thesis Candidate (5-6), or First Year Student (0-4). Personal best scores are saved in the browser. Fun and educational — not a personality or interest matcher.
 
 10. THESIS BUDGET CALCULATOR (/budget)
     A tool for estimating the total cost of a thesis project. Users can input expected expenses — printing, binding, research materials, survey costs, data collection, etc. — and get a running total. Helps students plan finances early.
@@ -107,7 +107,7 @@ STRICT RULES — FOLLOW WITHOUT EXCEPTION
   Research Planner: https://animosearch.vercel.app/planner
   Checklist: https://animosearch.vercel.app/checklist
   Showcase: https://animosearch.vercel.app/showcase
-  Research Match Quiz: https://animosearch.vercel.app/quiz
+  Research Quiz: https://animosearch.vercel.app/quiz
   Thesis Budget Calculator: https://animosearch.vercel.app/budget
   Submit a Thesis: https://animosearch.vercel.app/submit
   About: https://animosearch.vercel.app/about
