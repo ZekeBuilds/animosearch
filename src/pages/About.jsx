@@ -23,6 +23,10 @@ const FEATURES = [
   'Thesis budget estimator with customizable cost categories',
   'DLSU and research trivia quiz with score tiers and high score',
   'Research showcase featuring notable theses with abstract lightbox',
+  'Research Trends — interactive charts for publication volume, college distribution, top keywords, and activity heatmap',
+  'Topic Map — D3.js bubble visualization of research keywords, filterable by college',
+  'AI-powered Research Gap Finder — identifies underresearched topics by college and department',
+  'AI Chatbot — floating assistant with live thesis search and natural language answers',
   'Community submission form — add missing theses to the database',
   'Dark mode with localStorage persistence',
   'Responsive design tested at 375px, 768px, 1024px, and 1440px',
@@ -60,7 +64,7 @@ export default function About() {
                 AnimoSearch is a thesis discovery and research guidance platform built on real data from DLSU's Animo Repository. The goal is to give DLSU students a fast, searchable way to find existing research in their field, understand what has been studied before, and identify genuine research gaps.
               </p>
               <p>
-                Beyond search, AnimoSearch includes practical tools for every stage of the thesis journey: a writing guide, a milestone planner, a submission checklist, and a budget estimator. The platform was built as the final output for LBYCPG3, demonstrating full-stack front-end development with React, Supabase, and a real institutional data source.
+                Beyond search, AnimoSearch includes practical tools for every stage of the thesis journey: a writing guide, a milestone planner, a submission checklist, and a budget estimator. The platform was built as the final output for LBYCPG3, demonstrating full-stack web development with React, Supabase, and a real institutional data source.
               </p>
             </div>
           </section>
