@@ -396,9 +396,18 @@ Deno.serve(async (req: Request) => {
     }
 
     const groqData = await groqRes.json()
-    const reply: string =
+    const raw: string =
       groqData.choices?.[0]?.message?.content?.trim() ??
       'Sorry, I was unable to generate a response. Please try again.'
+
+    // Strip markdown the model outputs despite instructions — asterisks render as
+    // literal characters in the chat UI which does not support markdown.
+    const reply = raw
+      .replace(/\*\*(.+?)\*\*/g, '$1')   // **bold** → plain
+      .replace(/\*(.+?)\*/g, '$1')        // *italic* → plain
+      .replace(/^#{1,6}\s+/gm, '')        // ## Heading → plain
+      .replace(/`([^`]+)`/g, '$1')        // `code` → plain
+      .replace(/^\s*[-*]\s+/gm, '')       // - bullet / * bullet → remove dash
 
     // --- Return safe subset of thesis fields ---
     const suggestedTheses = matches.map((t) => ({
