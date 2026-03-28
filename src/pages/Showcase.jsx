@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 import { X, ExternalLink, BookOpen, ArrowRight } from 'lucide-react'
@@ -14,6 +14,12 @@ export default function Showcase() {
   const [activeCollege, setActiveCollege] = useState('All')
   const [lightbox, setLightbox] = useState(null)
   const [page, setPage] = useState(1)
+  const isFirstRender = useRef(true)
+
+  useEffect(() => {
+    if (isFirstRender.current) { isFirstRender.current = false; return }
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [page])
 
   const { data: theses = [] } = useQuery({ queryKey: ['theses'], queryFn: fetchAllTheses })
 
@@ -126,7 +132,7 @@ export default function Showcase() {
           {totalPages > 1 && (
             <div className="flex items-center justify-center gap-2 mt-10">
               <button
-                onClick={() => { setPage(p => p - 1); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                onClick={() => setPage(p => p - 1)}
                 disabled={page === 1}
                 className="px-4 py-2 rounded-full font-label text-xs border border-[var(--color-border-light)] dark:border-white/10 bg-white dark:bg-white/10 text-[var(--color-ink-muted)] dark:text-white/60 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
               >
@@ -136,7 +142,7 @@ export default function Showcase() {
                 {page} / {totalPages}
               </span>
               <button
-                onClick={() => { setPage(p => p + 1); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                onClick={() => setPage(p => p + 1)}
                 disabled={page === totalPages}
                 className="px-4 py-2 rounded-full font-label text-xs border border-[var(--color-border-light)] dark:border-white/10 bg-white dark:bg-white/10 text-[var(--color-ink-muted)] dark:text-white/60 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
               >
