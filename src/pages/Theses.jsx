@@ -116,7 +116,7 @@ export default function Theses() {
     <>
       <Helmet>
         <title>Browse Theses — AnimoSearch</title>
-        <meta name="description" content="Search and browse 100+ DLSU theses by college, degree level, year, and keyword." />
+        <meta name="description" content="Search and browse 1,092 DLSU theses by college, degree level, year, and keyword." />
       </Helmet>
 
       {/* Page header */}

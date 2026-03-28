@@ -150,7 +150,7 @@ export default function Footer() {
             <div className="space-y-2 text-sm text-white/50">
               <div className="flex items-center gap-2">
                 <Mail size={14} aria-hidden="true" />
-                <span>animosearch@dlsu.edu.ph</span>
+                <span>ezekiel_libao@dlsu.edu.ph</span>
               </div>
               <div className="flex items-center gap-2">
                 <Github size={14} aria-hidden="true" />

@@ -5,14 +5,14 @@ import { Github, Code2, Database, Globe, Layers, Palette, ExternalLink } from 'l
 const TECH_STACK = [
   { icon: Code2, name: 'React 19 + Vite', role: 'Component-based UI + fast dev server with lazy loading' },
   { icon: Palette, name: 'Tailwind CSS v4', role: 'Utility-first styling with custom DLSU design tokens' },
-  { icon: Globe, name: 'React Router DOM v7', role: 'Client-side SPA navigation (12 routes)' },
+  { icon: Globe, name: 'React Router DOM v7', role: 'Client-side SPA navigation (16 routes)' },
   { icon: Database, name: 'Supabase', role: 'Thesis database + community submission form' },
   { icon: Layers, name: '@tanstack/react-query', role: 'Data fetching, caching, and loading states' },
   { icon: Code2, name: 'AOS + Lucide React', role: 'Scroll animations + SVG icon library' },
 ]
 
 const FEATURES = [
-  'Browse 100+ real DLSU theses from the Animo Repository OAI-PMH API',
+  'Browse 1,092 real DLSU theses from the Animo Repository OAI-PMH API',
   'Full-text search by title, author, abstract, and keywords',
   'Filter by college, degree level, and year range',
   'Thesis detail pages with abstract, keywords, and Animo Repository link',

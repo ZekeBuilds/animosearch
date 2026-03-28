@@ -159,7 +159,7 @@ export default function Home() {
   const topColleges = colleges
 
   const stats = [
-    { value: 20000, label: 'Theses & Dissertations', suffix: '+' },
+    { value: 20000, label: 'Theses in Animo Repository', suffix: '+' },
     { value: 8, label: 'Colleges', suffix: '' },
     { value: 50, label: 'Degree Programs', suffix: '+' },
     { value: 2200, label: 'New Submissions/Year', suffix: '+' },
@@ -168,7 +168,7 @@ export default function Home() {
   const reasons = [
     {
       title: 'Smart Discovery',
-      desc: 'Search and filter 20,000+ DLSU theses by keyword, college, degree level, and year. Find relevant prior work in seconds.',
+      desc: 'Search and filter 1,092 indexed DLSU theses by keyword, college, degree level, and year. Find relevant prior work in seconds.',
     },
     {
       title: 'Real Research Data',
@@ -209,7 +209,7 @@ export default function Home() {
     <>
       <Helmet>
         <title>AnimoSearch — DLSU Thesis & Research Finder</title>
-        <meta name="description" content="Discover DLSU research. Browse, search, and explore 20,000+ theses and dissertations from De La Salle University's Animo Repository." />
+        <meta name="description" content="Discover DLSU research. Search 1,092 indexed theses and dissertations from De La Salle University's Animo Repository." />
       </Helmet>
 
       {/* ── HERO ──────────────────────────────────────────── */}
@@ -267,7 +267,7 @@ export default function Home() {
               animationFillMode: 'forwards',
             }}
           >
-            Search 20,000+ theses and dissertations from the Animo Repository.
+            Search 1,092 indexed theses and dissertations from the Animo Repository.
             Find prior work, discover research gaps, and plan your own thesis with purpose.
           </p>
 
@@ -577,7 +577,7 @@ export default function Home() {
                 id="cta-heading"
                 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.75rem)' }}
               >
-                20,000+ Theses Waiting to Inform Your Research
+                1,092 Indexed Theses. 20,000+ in the Animo Repository.
               </h2>
               <p className="text-white/70 text-sm leading-relaxed mb-8">
                 Every great thesis builds on what came before. Browse the Animo Repository, find your research gap, and use our tools to plan your journey from proposal to defense.
