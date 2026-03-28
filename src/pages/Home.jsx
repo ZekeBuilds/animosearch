@@ -47,7 +47,7 @@ function ThesisCard({ thesis }) {
   return (
     <Link
       to={`/theses/${thesis.slug}`}
-      className="group flex-shrink-0 w-72 md:w-80 h-full flex flex-col rounded-2xl overflow-hidden bg-white dark:bg-[var(--color-card-dark)] shadow-[0_4px_20px_rgba(0,94,58,0.1)] hover:shadow-[0_8px_32px_rgba(0,94,58,0.2)] transition-all duration-300 hover:-translate-y-1 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
+      className="group flex-shrink-0 w-72 md:w-80 h-full flex flex-col rounded-2xl overflow-hidden bg-white dark:bg-[var(--color-card-dark)] shadow-[0_4px_20px_rgba(0,94,58,0.1)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
       aria-label={`Read thesis: ${thesis.title}`}
     >
       {/* Color header band by college */}
@@ -85,7 +85,9 @@ function FeaturedCarousel({ featured }) {
   const containerRef = useRef(null)
   const pausedRef = useRef(false)
   const posRef = useRef(0)
+  const hoverClearRef = useRef(null)
   const [paused, setPaused] = useState(false)
+  const [hoveredIdx, setHoveredIdx] = useState(null)
 
   useEffect(() => {
     if (!featured.length) return
@@ -106,11 +108,49 @@ function FeaturedCarousel({ featured }) {
     return () => cancelAnimationFrame(raf)
   }, [featured.length])
 
+  useEffect(() => () => clearTimeout(hoverClearRef.current), [])
+
   const handleMouseEnter = () => { pausedRef.current = true; setPaused(true) }
   const handleMouseLeave = () => {
     if (containerRef.current) posRef.current = containerRef.current.scrollLeft
     pausedRef.current = false
     setPaused(false)
+    clearTimeout(hoverClearRef.current)
+    setHoveredIdx(null)
+  }
+
+  const handleCardEnter = (idx) => {
+    clearTimeout(hoverClearRef.current)
+    setHoveredIdx(idx)
+  }
+
+  const handleCardLeave = () => {
+    hoverClearRef.current = setTimeout(() => setHoveredIdx(null), 80)
+  }
+
+  // Uses physical index i (not logicalIdx) so only the one card under the cursor lifts,
+  // not both copies in the doubled array.
+  const getCardStyle = (physicalIdx) => {
+    const transition = 'transform 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+    if (hoveredIdx === null) {
+      return { transform: 'scale(1) translateY(0px)', transition, zIndex: 1 }
+    }
+    const dist = Math.abs(physicalIdx - hoveredIdx)
+    if (dist === 0) return {
+      transform: 'scale(1.055) translateY(-10px)',
+      transition: 'transform 0.38s cubic-bezier(0.34, 1.42, 0.64, 1)',
+      zIndex: 10,
+      willChange: 'transform',
+      filter: 'drop-shadow(0 16px 32px rgba(0,94,58,0.22))',
+    }
+    if (dist === 1) return {
+      transform: 'scale(0.965) translateY(4px)',
+      transition,
+      zIndex: 2,
+      willChange: 'transform',
+      filter: 'brightness(0.92)',
+    }
+    return { transform: 'scale(0.985) translateY(2px)', transition, zIndex: 1, filter: 'brightness(0.88)' }
   }
 
   if (!featured.length) return null
@@ -125,16 +165,19 @@ function FeaturedCarousel({ featured }) {
         role="list"
         aria-label="Featured theses carousel"
       >
-        <div className="flex w-max">
+        <div className="flex w-max items-end" style={{ paddingTop: '18px', paddingBottom: '6px' }}>
           {doubled.map((thesis, i) => (
-            <div
-              key={`${thesis.id}-${i}`}
-              className="h-[380px] flex-shrink-0 w-72 md:w-80 mr-5"
-              role="listitem"
-              aria-hidden={i >= featured.length ? true : undefined}
-            >
-              <ThesisCard thesis={thesis} />
-            </div>
+              <div
+                key={`${thesis.id}-${i}`}
+                className="h-[380px] flex-shrink-0 w-72 md:w-80 mr-5 relative"
+                style={getCardStyle(i)}
+                onMouseEnter={() => handleCardEnter(i)}
+                onMouseLeave={handleCardLeave}
+                role="listitem"
+                aria-hidden={i >= featured.length ? true : undefined}
+              >
+                <ThesisCard thesis={thesis} />
+              </div>
           ))}
         </div>
       </div>
