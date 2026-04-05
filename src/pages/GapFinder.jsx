@@ -31,7 +31,7 @@ export default function GapFinder() {
         },
       })
 
-      if (fnError) throw new Error(fnError.message)
+      if (fnError) throw new Error('Unable to reach the analysis service. Please try again.')
       if (data?.error) throw new Error(data.error)
 
       setResult(data)

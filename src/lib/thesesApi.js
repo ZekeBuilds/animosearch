@@ -31,7 +31,10 @@ export async function fetchAllTheses() {
       .order('year', { ascending: false })
       .range(from, from + BATCH - 1)
 
-    if (error) throw error
+    if (error) {
+      console.error('fetchAllTheses error:', error.message)
+      throw new Error('Failed to load theses. Please try again.')
+    }
     if (!data || data.length === 0) break
     all = all.concat(data)
     if (data.length < BATCH) break
@@ -50,7 +53,8 @@ export async function fetchThesisBySlug(slug) {
 
   if (error) {
     if (error.code === 'PGRST116') return null // row not found
-    throw error
+    console.error('fetchThesisBySlug error:', error.message)
+    throw new Error('Failed to load thesis. Please try again.')
   }
   return normalize(data)
 }
@@ -63,6 +67,9 @@ export async function fetchRelatedTheses(college, excludeSlug, limit = 4) {
     .neq('slug', excludeSlug)
     .limit(limit)
 
-  if (error) throw error
+  if (error) {
+    console.error('fetchRelatedTheses error:', error.message)
+    throw new Error('Failed to load related theses.')
+  }
   return data
 }
