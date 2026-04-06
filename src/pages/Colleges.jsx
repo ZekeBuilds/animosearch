@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { ChevronRight, BookOpen, ArrowRight } from 'lucide-react'
@@ -19,6 +19,12 @@ export default function Colleges() {
   }, [location.state?.college])
 
   const { data: theses = [] } = useQuery({ queryKey: ['theses'], queryFn: fetchAllTheses })
+
+  const collegeCounts = useMemo(() => {
+    const counts = {}
+    theses.forEach(t => { counts[t.college] = (counts[t.college] || 0) + 1 })
+    return counts
+  }, [theses])
 
   const selectedCollege = activeCollege ? colleges.find(c => c.id === activeCollege) : null
   const collegeTheses = selectedCollege
@@ -90,7 +96,7 @@ export default function Colleges() {
                   </p>
                 </div>
                 <p className="font-label text-xs text-[var(--color-ink-subtle)] dark:text-white/40 flex-shrink-0">
-                  {college.thesisCount.toLocaleString()} theses
+                  {(collegeCounts[college.abbreviation] ?? 0).toLocaleString()} theses
                 </p>
                 <ChevronRight
                   size={16}
