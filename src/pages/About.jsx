@@ -133,7 +133,7 @@ export default function About() {
                 <p className="text-white/60 text-sm">Full source code, commit history, and documentation for the LBYCPG3 final project.</p>
               </div>
               <a
-                href="https://github.com/your-username/animosearch"
+                href="https://github.com/ZekeBuilds/animosearch"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-6 py-3 bg-white text-[var(--color-ink)] rounded-full font-label text-xs font-semibold hover:bg-[var(--color-sky-bg)] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
