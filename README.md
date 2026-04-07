@@ -14,7 +14,7 @@ A thesis and research discovery platform for De La Salle University. Browse, sea
 | Theses | `/theses` | Browse all 1,092 theses with search, filters, and pagination |
 | Thesis Detail | `/theses/:slug` | Full thesis info with abstract, authors, citation panel, and Animo Repository link |
 | Colleges | `/colleges` | Browse theses by DLSU college |
-| Writing Guide | `/writing-guide` | Step-by-step guide to writing a thesis |
+| Writing Guide | `/guide` | Step-by-step guide to writing a thesis |
 | Research Planner | `/planner` | Plan and track your research timeline |
 | Checklist | `/checklist` | Thesis submission checklist |
 | Showcase | `/showcase` | Featured recent theses (2020-2024) |
@@ -23,8 +23,9 @@ A thesis and research discovery platform for De La Salle University. Browse, sea
 | Submit | `/submit` | Submit a thesis for inclusion |
 | About | `/about` | About the project and team |
 | Trends | `/trends` | Data visualizations: publications by year, college output, top keywords, heatmap |
-| Topic Map | `/topic-map` | Interactive d3 bubble chart of research keywords by college |
+| Topic Map | `/topics` | Interactive d3 bubble chart of research keywords by college |
 | Gap Finder | `/gap-finder` | AI-powered research gap analysis by college and department |
+| Not Found | `*` | Custom 404 page for unmatched routes |
 
 ---
 
@@ -115,7 +116,7 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 src/
   components/       Navbar, Footer, ChatWidget
-  pages/            15 page components
+  pages/            16 page components
   lib/              supabaseClient.js, thesesApi.js
   data/             colleges.js, quizQuestions.js, checklistItems.js, guideContent.js
 supabase/
